@@ -2,12 +2,12 @@ import os
 import json
 import shutil
 import zipfile
-from log import c_log
+from log import log
 
 temp = 'temp'
 readme = ['LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
 # 初始化
-logger = c_log()
+logger = log()
 
 def zip_files_and_folders(file_paths, zip_name):
     with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zipf:

@@ -3,7 +3,7 @@ import colorama
 from datetime import datetime
 from colorama import Fore
 
-class c_log:
+class log:
     ver = "1.0.0.0"
     def __init__(self) -> None:
         # 初始化
