@@ -28,6 +28,7 @@ class log:
         self._log_file.write(f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:write_log][{type}]: {message}\n')
     
     def log_(self, message: str, type='log', color: str = "") -> None:
+        color = color.upper()
         if color == "":
             if type == 'warn':
                 color = Fore.YELLOW  # 黃色
@@ -40,15 +41,28 @@ class log:
         else:
             _color = color
             _color = f"[{_color}]"
-            if color=="red":
+            if color=="RED":
                 color = Fore.RED # 紅色
-            elif color == "yellow":
+            elif color == "YELLOW":
                 color = Fore.YELLOW  # 黃色
+            elif color == "BLACK":
+                color = Fore.BLACK
+            elif color == "GREEN":
+                color = Fore.GREEN
+            elif color == "BLUE":
+                color = Fore.BLUE
+            elif color == "MAGENTA":
+                color = Fore.MAGENTA
+            elif color == "CYAN":
+                color = Fore.CYAN
+            elif color == "WHITE":
+                color = Fore.WHITE
 
         print(color + message + Fore.RESET)
         self._log_file.write(f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:log][{type}]{_color}: {message}\n')
 
     def input_(self, message: str, type='log', color: str = "") -> str:
+        color = color.upper()
         if color == "":
             _color = ""
             if type == 'warn':
@@ -58,10 +72,22 @@ class log:
         else:
             _color = color
             _color = f"[{_color}]"
-            if color=="red":
+            if color=="RED":
                 color = Fore.RED # 紅色
-            elif color == "yellow":
+            elif color == "YELLOW":
                 color = Fore.YELLOW  # 黃色
+            elif color == "BLACK":
+                color = Fore.BLACK
+            elif color == "GREEN":
+                color = Fore.GREEN
+            elif color == "BLUE":
+                color = Fore.BLUE
+            elif color == "MAGENTA":
+                color = Fore.MAGENTA
+            elif color == "CYAN":
+                color = Fore.CYAN
+            elif color == "WHITE":
+                color = Fore.WHITE
 
         r = input(color + message + Fore.RESET)
         self._log_file.write(f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:input][{type}]{_color}: {message}\n')
