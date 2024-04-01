@@ -28,7 +28,7 @@ def main():
                     try:
                         zipf.write(file_path, os.path.basename(file_path))
                     except FileNotFoundError:
-                        logger._log(f"檔案不存在: {file_path}", 'warn')
+                        logger.log_(f"檔案不存在: {file_path}", 'warn')
 
     def list_files_and_subdirectories(directory, output_dict):
         for root, dirs, files in os.walk(directory):
@@ -44,15 +44,15 @@ def main():
 
     output_dict = {}
     while True:
-        output_dict['name'] = logger._input('請輸入模組名稱: ')
-        output_dict['version'] = logger._input('請輸入類似於1.0.0的模組版本號: ')
-        yne = logger._input("確定? (Yes/Not/Exit): ", "log", "red").lower()
+        output_dict['name'] = logger.input_('請輸入模組名稱: ')
+        output_dict['version'] = logger.input_('請輸入類似於1.0.0的模組版本號: ')
+        yne = logger.input_("確定? (Yes/Not/Exit): ", "log", "red").lower()
         if yne in ("y", "yes"):
             break
         elif yne in ("e", "exit"):
             shutil.rmtree(temp)
             os._exit(0)
-    logger._log('模組生成中請稍等...')
+    logger.log_('模組生成中請稍等...')
     output_dict['styleFileList'] = []
     output_dict['scriptFileList'] = []
     output_dict['tweeFileList'] = []
@@ -96,8 +96,8 @@ def main():
         os.remove(zip_name) # 刪除 zip_name
     shutil.move(os.path.join(temp, zip_name), os.curdir)
     print('')
-    logger._log(f'模组生成完成: {output_dict["name"] + ".mod.zip"}')
-    logger._log(f'檔案大小: {os.path.getsize(zip_name)}位元組')
+    logger.log_(f'模组生成完成: {output_dict["name"] + ".mod.zip"}')
+    logger.log_(f'檔案大小: {os.path.getsize(zip_name)}位元組')
 
     input()
 
