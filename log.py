@@ -5,8 +5,8 @@ from colorama import Fore
 import atexit
 import shutil
 
-class log:
-    ver = "1.0.1.1"
+class logger:
+    ver = "1.0.2.1"
     def __init__(self, temp_path = 'temp') -> None: # 初始化
         try:
             # 初始化 colorama
@@ -15,17 +15,30 @@ class log:
             os.makedirs(f'{self._temp_path}', exist_ok=True)
             atexit.register(self.del_temp)
             self._log_path = os.path.join(self._temp_path, 'log.log')
-            self._log_file = open(self._log_path, "a", encoding='utf-8')
-            self.write_log('init done\n')
+            self._log_file = open(self._log_path, "+a", encoding='utf-8')
+            self.write_log('init done')
         except Exception as e:
             self.log_(f'init error, {e}', 'error')
-            
+        self._log_file.flush()
+    
     def del_temp(self):
+        r"""
+        del temp
+        """
         self._log_file.close()
         shutil.rmtree(self._temp_path)
 
-    def write_log(self, message: str, type='log'):
-        self._log_file.write(f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:write_log][{type}]: {message}\n')
+    def write_log(self, message: str, type='log', type2 = None, z = None):
+        r"""
+        write_log: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:{type2}][{type}]{z}: {message}\n
+        """
+        if type2 == None:
+            type2 = "write_log"
+        if z == None:
+            z = ""
+        # todo \ --> \\
+        self._log_file.write(f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:{type2}][{type}]{z}: {message}\n')
+        self._log_file.flush()
     
     def log_(self, message: str, type='log', color: str = "") -> None:
         color = color.upper()
@@ -41,6 +54,7 @@ class log:
         else:
             _color = color
             _color = f"[{_color}]"
+            
             if color=="RED":
                 color = Fore.RED # 紅色
             elif color == "YELLOW":
@@ -59,7 +73,7 @@ class log:
                 color = Fore.WHITE
 
         print(color + message + Fore.RESET)
-        self._log_file.write(f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:log][{type}]{_color}: {message}\n')
+        self.write_log(message, type, "log", _color)
 
     def input_(self, message: str, type='log', color: str = "") -> str:
         color = color.upper()
@@ -89,7 +103,7 @@ class log:
             elif color == "WHITE":
                 color = Fore.WHITE
 
+        self.write_log(message, type, "input", _color)
         r = input(color + message + Fore.RESET)
-        self._log_file.write(f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:input][{type}]{_color}: {message}\n')
-        self._log_file.write(f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:input_return][{type}]: {r}\n')
+        self.write_log(r, type, "input_return")
         return r

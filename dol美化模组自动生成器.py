@@ -3,16 +3,19 @@ import json
 import shutil
 import zipfile
 import atexit
-from log import log
+from log import logger
+
+# 初始化
+logger = logger()
 
 def main():
     temp = 'temp'
     readme = ['LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
-    # 初始化
-    logger = log()
+
 
     def cleanup():
             # 刪除臨時目錄
+            logger.del_temp()
             shutil.rmtree(temp)
     # 註冊清理函數
     atexit.register(cleanup)
@@ -50,7 +53,7 @@ def main():
         if yne in ("y", "yes"):
             break
         elif yne in ("e", "exit"):
-            shutil.rmtree(temp)
+            cleanup()
             os._exit(0)
     logger.log_('模組生成中請稍等...')
     output_dict['styleFileList'] = []
