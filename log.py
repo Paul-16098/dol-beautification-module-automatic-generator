@@ -6,27 +6,28 @@ import atexit
 import shutil
 
 class logger:
-    ver = "1.0.2.1"
-    def __init__(self, temp_path = 'temp') -> None: # 初始化
+    ver = "1.0.4.0"
+    def __init__(self, debug = False, temp_path = 'temp') -> None: # 初始化
         try:
             # 初始化 colorama
             colorama.init()
             self._temp_path = temp_path
+            self._debug = debug
             os.makedirs(f'{self._temp_path}', exist_ok=True)
             atexit.register(self.del_temp)
             self._log_path = os.path.join(self._temp_path, 'log.log')
-            self._log_file = open(self._log_path, "+a", encoding='utf-8')
-            self.write_log('init done')
+            self._log_file = open(self._log_path, "w", encoding='utf-8')
+            self.write_log('========= init done =========')
         except Exception as e:
             self.log_(f'init error, {e}', 'error')
-        self._log_file.flush()
     
     def del_temp(self):
         r"""
         del temp
         """
         self._log_file.close()
-        shutil.rmtree(self._temp_path)
+        if self._debug == False:
+            shutil.rmtree(self._temp_path)
 
     def write_log(self, message: str, type='log', type2 = None, z = None):
         r"""
