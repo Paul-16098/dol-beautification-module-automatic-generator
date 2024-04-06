@@ -4,22 +4,28 @@ import json
 import shutil
 import zipfile
 import atexit
-from log import logger
+from logger import logger
+from retry import retry
+from timing import get_time
 
 # 初始化
 logger = logger()
 
+@get_time
 def main():
     temp = 'temp'
     readme = ['LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
 
-
+    @get_time
+    @retry()
     def cleanup():
             # 刪除臨時目錄
             logger.del_temp()
     # 註冊清理函數
     atexit.register(cleanup)
 
+    @retry()
+    @get_time
     def zip_files_and_folders(file_paths, zip_name):
         with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for file_path in file_paths:
@@ -33,6 +39,8 @@ def main():
                     except FileNotFoundError:
                         logger.log_(f"檔案不存在: {file_path}", 'warn')
 
+    @retry()
+    @get_time
     def list_files_and_subdirectories(directory, output_dict):
         for root, dirs, files in os.walk(directory):
             for file in files:
