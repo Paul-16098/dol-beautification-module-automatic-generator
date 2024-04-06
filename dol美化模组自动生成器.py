@@ -1,3 +1,4 @@
+# coding=utf-8
 import os
 import json
 import shutil
@@ -16,7 +17,6 @@ def main():
     def cleanup():
             # 刪除臨時目錄
             logger.del_temp()
-            shutil.rmtree(temp)
     # 註冊清理函數
     atexit.register(cleanup)
 
@@ -102,7 +102,7 @@ def main():
     logger.log_(f'模组生成完成: {output_dict["name"] + ".mod.zip"}')
     logger.log_(f'檔案大小: {os.path.getsize(zip_name)}位元組')
 
-    input()
+    os.system("pause")
 
 if __name__ == '__main__':
     main()

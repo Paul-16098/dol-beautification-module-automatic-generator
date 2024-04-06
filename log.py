@@ -1,3 +1,4 @@
+# coding=utf-8
 import os
 import colorama
 from datetime import datetime
@@ -25,14 +26,24 @@ class logger:
         r"""
         del temp
         """
-        self._log_file.close()
-        if self._debug == False:
-            shutil.rmtree(self._temp_path)
+        try:
+            self._log_file.close()
+            if self._debug == False:
+                shutil.rmtree(self._temp_path)
+        except PermissionError as e:
+            self.write_log(str(e), type="error")
+            # os.unlink(self._temp_path)
+        except ValueError as e:
+            # self.write_log(str(e), type="error")
+            os.unlink(self._temp_path)
 
     def write_log(self, message: str, type='log', type2 = None, z = None):
         r"""
         write_log: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:{type2}][{type}]{z}: {message}\n
         """
+        if self._log_file.closed:
+            print("文件已關閉，無法寫入日誌")
+            return
         if type2 == None:
             type2 = "write_log"
         if z == None:
