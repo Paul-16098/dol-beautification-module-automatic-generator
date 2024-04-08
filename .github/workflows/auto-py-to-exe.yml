@@ -27,6 +27,8 @@ jobs:
       run: |
         chcp 65001
         echo %cd%
+        dir>output.txt
+        type output.txt
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
