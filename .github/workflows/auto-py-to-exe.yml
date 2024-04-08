@@ -33,6 +33,8 @@ jobs:
     - name: py to exe
       run: |
         pyinstaller --noconfirm --onedir --console --icon ".\Vrelicon.ico" --onefile ".\dol美化模组自动生成器.exe"
+    - name: del temp
+      run: |
         del build /f /s /q
         rmdir build /s /q
         del dol美化模组自动生成器.spec /f /s /q
