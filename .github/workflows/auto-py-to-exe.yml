@@ -34,7 +34,7 @@ jobs:
         pip install pyinstaller
     - name: py to exe
       run: |
-        pyinstaller --noconfirm --onedir --console --icon "Vrelicon.ico" --onefile ".\dol美化模组自动生成器.exe"
+        pyinstaller --noconfirm --onedir --console --icon ".\Vrelicon.ico" --onefile ".\dol美化模组自动生成器.exe"
         del build /f /s /q
         rmdir build /s /q
         del dol美化模组自动生成器.spec /f /s /q
@@ -51,3 +51,12 @@ jobs:
           last-Release
         draft: false
         prerelease: false
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: .\dol美化模组自动生成器.exe
+        asset_name: dol美化模组自动生成器.exe
+        asset_content_type: application/octet-stream
