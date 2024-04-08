@@ -19,8 +19,6 @@ jobs:
     runs-on: [windows-latest]
 
     steps:
-    - name: Create Release
-      uses: actions/checkout@v3
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
@@ -40,55 +38,61 @@ jobs:
         del dol美化模组自动生成器.spec /f /s /q
         copy /v /y dist\dol美化模组自动生成器.exe .
 
-    - name: Delete Release
-      uses: actions/github-script@v4
-      with:
-        github-token: ${{ secrets.TOKEN }}
-        script: |
-            const deleteRelease = async () => {
-              try {
-                const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-                const releases = await octokit.repos.listReleases({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo
-                });
-                
-                const release = releases.data.find(r => r.tag_name === 'last-Release');
-                if (release) {
-                  await octokit.repos.deleteRelease({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    release_id: release.id
-                  });
-                  console.log('Release deleted successfully.');
-                } else {
-                  console.log('Release not found.');
-                }
-              } catch (error) {
-                console.error('Error deleting release:', error);
-              }
-            };
-            
-            deleteRelease();
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
-      with:
-        tag_name: last-Release  # 指定發行版的標籤名稱
-        release_name: last-Release  # 指定發行版的名稱
-        body: |
-          last-Release
-        draft: false
-        prerelease: false
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: .\dol美化模组自动生成器.exe
-        asset_name: dol美化模组自动生成器.exe
-        asset_content_type: application/octet-stream
+  Release:
+    runs-on: [windows-latest]
+    
+    steps:
+        - name: Create Release
+          uses: actions/checkout@v3
+        - name: Delete Release
+          uses: actions/github-script@v4
+          with:
+            github-token: ${{ secrets.TOKEN }}
+            script: |
+                    const deleteRelease = async () => {
+                      try {
+                        const octokit = github.getOctokit(process.env.TOKEN);
+                        const releases = await octokit.repos.listReleases({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo
+                        });
+                        
+                        const release = releases.data.find(r => r.tag_name === 'last-Release');
+                        if (release) {
+                          await octokit.repos.deleteRelease({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            release_id: release.id
+                          });
+                          console.log('Release deleted successfully.');
+                        } else {
+                          console.log('Release not found.');
+                        }
+                      } catch (error) {
+                        console.error('Error deleting release:', error);
+                      }
+                    };
+                    
+                    deleteRelease();
+        
+        - name: Create Release
+          id: create_release
+          uses: actions/create-release@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          with:
+            tag_name: last-Release  # 指定發行版的標籤名稱
+            release_name: last-Release  # 指定發行版的名稱
+            body: |
+              last-Release
+            draft: false
+            prerelease: false
+        - name: Upload Release Asset
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: .\dol美化模组自动生成器.exe
+            asset_name: dol美化模组自动生成器.exe
+            asset_content_type: application/octet-stream
