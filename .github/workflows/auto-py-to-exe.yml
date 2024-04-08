@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 name: py to exe
 
 on:
@@ -12,7 +13,7 @@ permissions:
 defaults:
   run:
     shell: cmd
-    # working-directory: .
+    working-directory: .
 
 jobs:
   build:
@@ -34,7 +35,7 @@ jobs:
     - name: py to exe
       run: |
         dir /s
-        pyinstaller --noconfirm --console --icon "Vrelicon.ico" --onefile "dol美化模组自动生成器.exe"
+        pyinstaller --noconfirm --console --icon ".\Vrelicon.ico" --onefile ".\dol美化模组自动生成器.exe"
     - name: del temp
       run: |
         del build /f /s /q
