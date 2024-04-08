@@ -38,3 +38,15 @@ jobs:
         rmdir build /s /q
         del dol美化模组自动生成器.spec /f /s /q
         copy /v /y dist\dol美化模组自动生成器.exe .
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: last-Release  # 指定發行版的標籤名稱
+        release_name: last-Release  # 指定發行版的名稱
+        body: |
+          last-Release
+        draft: false
+        prerelease: false
