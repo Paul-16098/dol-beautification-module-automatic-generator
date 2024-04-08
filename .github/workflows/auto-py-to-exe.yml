@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  TOKEN: ${{ secrets.TOKEN }}
+
 defaults:
   run:
     shell: cmd
@@ -58,9 +62,6 @@ jobs:
             github-token: ${{ secrets.TOKEN }}
             script: |
               const { getOctokit } = require('@actions/github');
-
-              console.log('GITHUB_TOKEN:', ${{ secrets.GITHUB_TOKEN }});
-              console.log('TOKEN:', ${{ secrets.TOKEN }});
 
               const deleteRelease = async () => {
                 try {
