@@ -46,38 +46,41 @@ jobs:
     runs-on: [windows-latest]
     
     steps:
-        - name: Create Release
-          uses: actions/checkout@v3
+        - uses: actions/checkout@v4.1.2
         - name: Delete Release
           uses: actions/github-script@v4
           with:
             github-token: ${{ secrets.TOKEN }}
             script: |
-                    const deleteRelease = async () => {
-                      try {
-                        const octokit = github.getOctokit("${{ secrets.TOKEN }}");
-                        const releases = await octokit.repos.listReleases({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo
-                        });
-                        
-                        const release = releases.data.find(r => r.tag_name === 'last-Release');
-                        if (release) {
-                          await octokit.repos.deleteRelease({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            release_id: release.id
-                          });
-                          console.log('Release deleted successfully.');
-                        } else {
-                          console.log('Release not found.');
-                        }
-                      } catch (error) {
-                        console.error('Error deleting release:', error);
-                      }
-                    };
+                const github = require('@actions/github');
+                const context = github.context;
+                
+                const deleteRelease = async () => {
+                  try {
+                    const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
                     
-                    deleteRelease();
+                    const releases = await octokit.repos.listReleases({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo
+                    });
+                    
+                    const release = releases.data.find(r => r.tag_name === 'last-Release');
+                    if (release) {
+                      await octokit.repos.deleteRelease({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        release_id: release.id
+                      });
+                      console.log('Release deleted successfully.');
+                    } else {
+                      console.log('Release not found.');
+                    }
+                  } catch (error) {
+                    console.error('Error deleting release:', error);
+                  }
+                };
+                
+                deleteRelease();
         
         - name: Create Release
           id: create_release
