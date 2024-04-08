@@ -5,7 +5,7 @@ import shutil
 import zipfile
 import atexit
 from logger import logger
-from retry import retry
+from retry import retry # type: ignore
 from timing import get_time
 
 # 初始化
@@ -13,6 +13,7 @@ logger = logger()
 
 @get_time
 def main():
+    ver = "1.0.0.0"
     temp = 'temp'
     readme = ['LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
 
@@ -54,6 +55,12 @@ def main():
     os.makedirs('img', exist_ok=True)
 
     output_dict = {}
+    
+    logger.log_("===========================")
+    logger.log_("dol美化模组自动生成器")
+    logger.log_(f"v{ver}    By Paul-16098")
+    logger.log_("===========================")
+    
     while True:
         output_dict['name'] = logger.input_('請輸入模組名稱: ')
         output_dict['version'] = logger.input_('請輸入類似於1.0.0的模組版本號: ')
