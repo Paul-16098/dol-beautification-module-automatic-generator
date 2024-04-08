@@ -35,6 +35,7 @@ jobs:
         pip install pyinstaller
     - name: py to exe
       run: |
+        dir /s
         pyinstaller --noconfirm --console --icon ".\Vrelicon.ico" --onefile ".\dol美化模组自动生成器.exe"
     - name: del temp
       run: |
