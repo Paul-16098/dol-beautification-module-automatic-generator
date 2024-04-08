@@ -26,6 +26,7 @@ jobs:
     - name: init
       run: |
         chcp 65001
+        echo %cd%
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
