@@ -13,7 +13,6 @@ permissions:
 defaults:
   run:
     shell: cmd
-    # working-directory: .
 
 jobs:
   build:
@@ -21,6 +20,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        sparse-checkout: .
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
