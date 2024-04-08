@@ -62,6 +62,7 @@ jobs:
             github-token: ${{ secrets.TOKEN }}
             script: |
                 const { getOctokit } = require('@actions/github');
+                context = github.context
 
                 const deleteRelease = async () => {
                   try {
