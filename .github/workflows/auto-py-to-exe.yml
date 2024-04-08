@@ -32,7 +32,7 @@ jobs:
         pip install pyinstaller
     - name: py to exe
       run: |
-        cd ..
+        cd .
         echo %cd%
         dir>output.txt
         type output.txt
