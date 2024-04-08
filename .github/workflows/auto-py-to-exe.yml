@@ -59,8 +59,8 @@ jobs:
             script: |
               const { getOctokit } = require('@actions/github');
 
-              console.log('GITHUB_TOKEN:', process.env.GITHUB_TOKEN);
-              console.log('TOKEN:', process.env.TOKEN);
+              console.log('GITHUB_TOKEN:', ${{ secrets.GITHUB_TOKEN }});
+              console.log('TOKEN:', ${{ secrets.TOKEN }});
 
               const deleteRelease = async () => {
                 try {
