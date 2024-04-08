@@ -26,6 +26,7 @@ jobs:
     - name: init
       run: |
         chcp 65001
+        cd ..
         echo %cd%
         dir>output.txt
         type output.txt
