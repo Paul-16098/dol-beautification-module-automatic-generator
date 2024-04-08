@@ -52,8 +52,8 @@ jobs:
           with:
             github-token: ${{ secrets.TOKEN }}
             script: |
-                // const github = require('@actions/github');
-                // const context = github.context;
+                # const github = require('@actions/github');
+                # const context = github.context;
                 
                 const deleteRelease = async () => {
                   try {
@@ -84,7 +84,7 @@ jobs:
         
         - name: Create Release
           id: create_release
-          uses: actions/create-release@v1
+          uses: actions/create-release@v1.1.4
           env:
             GITHUB_TOKEN: ${{ secrets.TOKEN }}
           with:
@@ -95,7 +95,7 @@ jobs:
             draft: false
             prerelease: false
         - name: Upload Release Asset
-          uses: actions/upload-release-asset@v1
+          uses: actions/upload-release-asset@v1.0.2
           env:
             GITHUB_TOKEN: ${{ secrets.TOKEN }}
           with:
