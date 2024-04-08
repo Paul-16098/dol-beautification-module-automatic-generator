@@ -52,35 +52,34 @@ jobs:
           with:
             github-token: ${{ secrets.TOKEN }}
             script: |
-                const github = require('@actions/github');
-                const context = github.context;
-                
-                const deleteRelease = async () => {
-                  try {
-                    const octokit = github.getOctokit(${{ secrets.TOKEN }});
-                    
-                    const releases = await octokit.repos.listReleases({
+              const { context, getOctokit } = require('@actions/github');
+
+              const deleteRelease = async () => {
+                try {
+                  const octokit = getOctokit(process.env.GITHUB_TOKEN);
+                  
+                  const releases = await octokit.repos.listReleases({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo
+                  });
+                  
+                  const release = releases.data.find(r => r.tag_name === 'last-Release');
+                  if (release) {
+                    await octokit.repos.deleteRelease({
                       owner: context.repo.owner,
-                      repo: context.repo.repo
+                      repo: context.repo.repo,
+                      release_id: release.id
                     });
-                    
-                    const release = releases.data.find(r => r.tag_name === 'last-Release');
-                    if (release) {
-                      await octokit.repos.deleteRelease({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        release_id: release.id
-                      });
-                      console.log('Release deleted successfully.');
-                    } else {
-                      console.log('Release not found.');
-                    }
-                  } catch (error) {
-                    console.error('Error deleting release:', error);
+                    console.log('Release deleted successfully.');
+                  } else {
+                    console.log('Release not found.');
                   }
-                };
-                
-                deleteRelease();
+                } catch (error) {
+                  console.error('Error deleting release:', error);
+                }
+              };
+              
+              deleteRelease();
         
         - name: Create Release
           id: create_release
