@@ -1,5 +1,6 @@
 name: py to exe
 
+
 on:
   push:
     branches: [ "main" ]
@@ -10,7 +11,7 @@ permissions:
   contents: read
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.TOKEN }}
   TOKEN: ${{ secrets.TOKEN }}
 
 defaults:
@@ -19,7 +20,7 @@ defaults:
 
 jobs:
   build:
-    runs-on: [windows-latest]
+    runs-on: [windows-latest, node20]
 
     steps:
     - uses: actions/checkout@v4.1.2
