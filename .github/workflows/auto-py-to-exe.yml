@@ -59,8 +59,8 @@ jobs:
         - name: Delete Release
           run: |
               node Delete_Release.js
-          with:
-            github-token: ${{ secrets.TOKEN }}
+          # with:
+          #   github-token: ${{ secrets.TOKEN }}
         
         - name: Create Release
           id: create_release
