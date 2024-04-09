@@ -58,9 +58,9 @@ jobs:
 
         - name: Delete Release
           uses: actions/github-script@v7.0.1
+          run: Delete_Release.js
           with:
             github-token: ${{ secrets.TOKEN }}
-          run: Delete_Release.js
         
         - name: Create Release
           id: create_release
