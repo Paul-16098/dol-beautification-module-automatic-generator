@@ -45,13 +45,6 @@ jobs:
         del dol美化模组自动生成器.spec /f /s /q
         copy /v /y dist\dol美化模组自动生成器.exe .
 
-
-    - name: Delete Release
-      uses: actions/github-script@v7.0.1
-      with:
-        github-token: ${{ secrets.TOKEN }}
-        run: Delete_Release.js
-
   Release:
     needs: build  # 添加 needs 關鍵字，指定依賴於 build 作業
     runs-on: [windows-latest]
@@ -63,7 +56,12 @@ jobs:
           run: |
               npm install @actions/github
 
-
+        - name: Delete Release
+          uses: actions/github-script@v7.0.1
+          with:
+            github-token: ${{ secrets.TOKEN }}
+            run: Delete_Release.js
+        
         - name: Create Release
           id: create_release
           uses: actions/create-release@v1.1.4
