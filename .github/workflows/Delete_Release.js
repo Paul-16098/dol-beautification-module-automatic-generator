@@ -1,4 +1,4 @@
-const { getOctokit } = require('@actions/github');
+const { getOctokit, context } = require('@actions/github');
 
 const deleteRelease = async () => {
   try {
@@ -12,8 +12,8 @@ const deleteRelease = async () => {
     const release = releases.data.find((r) => r.tag_name === "last-Release");
     if (release) {
       await octokit.rest.repos.deleteRelease({
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
         release_id: release.id,
       });
       console.log("Release deleted successfully.");
