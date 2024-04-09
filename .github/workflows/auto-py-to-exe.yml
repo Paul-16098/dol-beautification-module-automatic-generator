@@ -52,15 +52,14 @@ jobs:
         github-token: ${{ secrets.TOKEN }}
         script: |
               const { getOctokit } = require('@actions/github');
-              console.log(github.context)
 
               const deleteRelease = async () => {
                 try {
                   const octokit = getOctokit("${{ secrets.TOKEN }}");
                   
                   const releases = await octokit.rest.repos.listReleases({
-                    owner: github.context.repo.owner,
-                    repo: github.context.repo.repo
+                    owner: context.repo.owner,
+                    repo: context.repo.repo
                   });
                   
                   const release = releases.data.find(r => r.tag_name === 'last-Release');
