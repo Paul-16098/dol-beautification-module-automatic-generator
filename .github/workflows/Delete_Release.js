@@ -1,4 +1,4 @@
-import { getOctokit } from "@actions/github";
+const { getOctokit } = require('@actions/github');
 
 const deleteRelease = async () => {
   try {
