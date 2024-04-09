@@ -45,6 +45,43 @@ jobs:
         del dol美化模组自动生成器.spec /f /s /q
         copy /v /y dist\dol美化模组自动生成器.exe .
 
+
+    - name: Delete Release
+      uses: actions/github-script@v7.0.1
+      with:
+        github-token: ${{ secrets.TOKEN }}
+        script: |
+              const { getOctokit } = require('@actions/github');
+              console.log(github.context)
+
+              const deleteRelease = async () => {
+                try {
+                  const octokit = getOctokit("${{ secrets.TOKEN }}");
+                  
+                  const releases = await octokit.rest.repos.listReleases({
+                    owner: github.context.repo.owner,
+                    repo: github.context.repo.repo
+                  });
+                  
+                  const release = releases.data.find(r => r.tag_name === 'last-Release');
+                  if (release) {
+                    await octokit.rest.repos.deleteRelease({
+                      owner: github.context.repo.owner,
+                      repo: github.context.repo.repo,
+                      release_id: release.id
+                    });
+                    console.log('Release deleted successfully.');
+                  } else {
+                    console.log('Release not found.');
+                  }
+                } catch (error) {
+                  console.error('Error deleting release:', error);
+                }
+              };
+              
+              deleteRelease();
+      
+
   Release:
     needs: build  # 添加 needs 關鍵字，指定依賴於 build 作業
     runs-on: [windows-latest]
@@ -56,41 +93,7 @@ jobs:
           run: |
               npm install @actions/github
 
-        - name: Delete Release
-          uses: actions/github-script@v7.0.1
-          with:
-            github-token: ${{ secrets.TOKEN }}
-            script: |
-                const { getOctokit } = require('@actions/github');
-                console.log(github.context)
 
-                const deleteRelease = async () => {
-                  try {
-                    const octokit = getOctokit("${{ secrets.TOKEN }}");
-                    
-                    const releases = await octokit.rest.repos.listReleases({
-                      owner: github.context.repo.owner,
-                      repo: github.context.repo.repo
-                    });
-                    
-                    const release = releases.data.find(r => r.tag_name === 'last-Release');
-                    if (release) {
-                      await octokit.rest.repos.deleteRelease({
-                        owner: github.context.repo.owner,
-                        repo: github.context.repo.repo,
-                        release_id: release.id
-                      });
-                      console.log('Release deleted successfully.');
-                    } else {
-                      console.log('Release not found.');
-                    }
-                  } catch (error) {
-                    console.error('Error deleting release:', error);
-                  }
-                };
-                
-                deleteRelease();
-        
         - name: Create Release
           id: create_release
           uses: actions/create-release@v1.1.4
