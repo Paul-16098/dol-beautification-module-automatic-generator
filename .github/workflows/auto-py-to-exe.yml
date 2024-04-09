@@ -58,7 +58,7 @@ jobs:
 
         - name: Delete Release
           run: |
-              node Delete_Release.js
+              node .github\workflows\Delete_Release.js
           # with:
           #   github-token: ${{ secrets.TOKEN }}
         
