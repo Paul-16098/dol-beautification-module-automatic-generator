@@ -39,12 +39,21 @@ jobs:
         pip install pyinstaller
     - name: py to exe
       run: pyinstaller --noconfirm --console --icon "Vrelicon.ico" --onefile "dol美化模组自动生成器.py"
+
+    - run: |
+        cd
+        dir /s
+
     - name: del temp
       run: |
         del build /f /s /q
         rmdir build /s /q
         del dol美化模组自动生成器.spec /f /s /q
         copy /v /y dist\dol美化模组自动生成器.exe .
+
+    - run: |
+        cd
+        dir /s
 
   Release:
     needs: build  # 添加 needs 關鍵字，指定依賴於 build 作業
