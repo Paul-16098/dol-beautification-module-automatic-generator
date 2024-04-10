@@ -58,7 +58,7 @@ jobs:
 
         - name: Set Current Time
           id: set_time
-          run: echo "::set-output name=current_time::$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          run: ::set-output name=current_time::$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
         - name: Create Release
           id: create_release
