@@ -1,4 +1,5 @@
 echo off
+chcp 65001
 cls
 set "py_path=%1"
 set "script_dir=%~dp0"

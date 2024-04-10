@@ -50,9 +50,9 @@
       "value": false
     },
     {
-      "optionDest": "datas",
-      "value": "C:/Users/p/Documents/git/vs_code/License.txt;."
-     }
+      "optionDest": "icon_file",
+      "value": "C:/Users/p/Documents/git/dol-beautification-module-automatic-generator/Vrelicon.ico"
+    }
   ],
   "nonPyinstallerOptions": {
     "increaseRecursionLimit": true,
