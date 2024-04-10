@@ -53,14 +53,11 @@ jobs:
     steps:
         - uses: actions/checkout@v4.1.2
 
-        - name: init
-          run: |
-
         - uses: marvinpinto/action-automatic-releases@latest
           with:
             repo_token: "${{ secrets.GITHUB_TOKEN }}"
             automatic_release_tag: "latest-Release"
-            prerelease: true
+            prerelease: false
             title: "Development Build"
             files: |
                 dol美化模组自动生成器.exe
