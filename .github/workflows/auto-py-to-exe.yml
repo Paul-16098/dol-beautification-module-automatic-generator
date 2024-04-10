@@ -37,7 +37,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyinstaller
     - name: py to exe
-      run: pyinstaller --noconfirm --console --icon "Vrelicon.ico" --onefile "dol美化模组自动生成器.py"
+      run: |
+          chcp 65001
+          pyinstaller --noconfirm --console --icon "Vrelicon.ico" --onefile "dol美化模组自动生成器.py"
 
     - name: del temp
       run: |
@@ -46,10 +48,12 @@ jobs:
         del dol美化模组自动生成器.spec /f /s /q
         copy /v /y dist\dol美化模组自动生成器.exe .
 
-    - run: |
+    - name: push
+      run: |
         git push -v --all
 
-    - uses: marvinpinto/action-automatic-releases@latest
+    - name: releases
+      uses: marvinpinto/action-automatic-releases@latest
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "latest-Release"
