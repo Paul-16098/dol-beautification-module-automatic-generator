@@ -47,7 +47,7 @@ jobs:
         copy /v /y dist\dol美化模组自动生成器.exe .
 
     - run: |
-        git push
+        git push -v --all
 
   Release:
     needs: build  # 添加 needs 關鍵字，指定依賴於 build 作業
