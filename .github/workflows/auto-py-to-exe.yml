@@ -57,15 +57,17 @@ jobs:
           run: |
 
         - name: Set Commit SHA
-          run: echo "COMMIT_SHA=$(echo ${{ github.sha }} | cut -c 1-8)" >> $GITHUB_ENV
+          id: Set_Commit_SHA
+          run: echo "::set-output name=COMMIT_SHA::$(echo ${{ github.sha }} | cut -c 1-8)"
+
         - name: Create Release
           id: create_release
           uses: actions/create-release@v1.1.4
           env:
             GITHUB_TOKEN: ${{ secrets.TOKEN }}
           with:
-            tag_name: pull-${{ env.COMMIT_SHA }}-${{ github.ref_name }}  # 指定發行版的標籤名稱
-            release_name: ${{ env.COMMIT_SHA }}-Release  # 指定發行版的名稱
+            tag_name: pull-${{ steps.Set_Commit_SHA.COMMIT_SHA }}-${{ github.ref_name }}  # 指定發行版的標籤名稱
+            release_name: ${{ steps.Set_Commit_SHA.COMMIT_SHA }}-Release  # 指定發行版的名稱
             body: |
               自動編譯版本
             draft: false
