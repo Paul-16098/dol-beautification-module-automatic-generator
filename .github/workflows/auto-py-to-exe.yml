@@ -66,8 +66,8 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.TOKEN }}
           with:
-            tag_name: pull-${{ steps.Set_Commit_SHA.COMMIT_SHA }}-${{ github.ref_name }}  # 指定發行版的標籤名稱
-            release_name: ${{ steps.Set_Commit_SHA.COMMIT_SHA }}-Release  # 指定發行版的名稱
+            tag_name: pull-${{ steps.Set_Commit_SHA.outputs }}-${{ github.ref_name }}  # 指定發行版的標籤名稱
+            release_name: ${{ steps.Set_Commit_SHA.outputs }}-Release  # 指定發行版的名稱
             body: |
               自動編譯版本
             draft: false
