@@ -1,27 +1,22 @@
-const { Octokit, context } = require("@actions/github");
+const { Octokit } = require("@octokit/rest");
+const { context } = require("@actions/github");
 
 async function deleteRelease() {
   const octokit = new Octokit({
-    auth: "${{ secrets.TOKEN }}",
+    auth: process.env.TOKEN,
   });
 
-  const releases = await octokit.rest.repos.listReleases({
+  const releases = await octokit.repos.listReleases({
     owner: context.repo.owner,
     repo: context.repo.repo,
   });
   const release = releases.data.find((r) => r.tag_name === "last-Release");
 
-  await octokit.request(
-    "DELETE /repos/Paul-16098/dol-beautification-module-automatic-generator/releases/{release_id}",
-    {
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      release_id: release.id,
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-    }
-  );
+  await octokit.repos.deleteRelease({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    release_id: release.id,
+  });
 }
 
 deleteRelease();
