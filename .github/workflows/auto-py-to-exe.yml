@@ -39,7 +39,7 @@ jobs:
     - name: py to exe
       run: |
           chcp 65001
-          pyinstaller --noconfirm --console --icon "Vrelicon.ico" --onefile "dol美化模组自动生成器.py"
+          pyinstaller --noconfirm --onefile --console --icon "Vrelicon.ico"  "dol美化模组自动生成器.py"
 
     - name: del temp
       run: |
