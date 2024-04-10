@@ -64,7 +64,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.TOKEN }}
           with:
             tag_name: pull-${{ github.ref_name }}  # 指定發行版的標籤名稱
-            release_name: Release-${{ github.job_workflow_sha }}  # 指定發行版的名稱
+            release_name: Release-${{ github.sha }}  # 指定發行版的名稱
             body: |
               自動編譯版本
             draft: false
