@@ -58,6 +58,6 @@ jobs:
             repo_token: "${{ secrets.GITHUB_TOKEN }}"
             automatic_release_tag: "latest-Release"
             prerelease: false
-            title: "Development Build"
+            title: "最新的自動編譯版本"
             files: |
                 dol美化模组自动生成器.exe
