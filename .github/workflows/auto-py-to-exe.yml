@@ -56,7 +56,7 @@ jobs:
         - name: init
           run: |
               npm install @actions/github
-              npm install @octokit/rest
+              npm install @octokit/core
 
         - name: Delete Release
           run: |

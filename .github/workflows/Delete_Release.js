@@ -1,4 +1,4 @@
-const { Octokit } = require("@octokit/rest");
+import { Octokit } from "@octokit/core";
 const { context } = require("@actions/github");
 
 async function deleteRelease() {
