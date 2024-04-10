@@ -47,10 +47,6 @@ jobs:
         del dol美化模组自动生成器.spec /f /s /q
         copy /v /y dist\dol美化模组自动生成器.exe .
 
-    - run: |
-        cd
-        dir
-
   Release:
     needs: build  # 添加 needs 關鍵字，指定依賴於 build 作業
     runs-on: [windows-latest]
@@ -61,10 +57,6 @@ jobs:
         - name: init
           run: |
 
-        - run: |
-            cd
-            dir /s
-
         - name: Create Release
           id: create_release
           uses: actions/create-release@v1.1.4
@@ -72,7 +64,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.TOKEN }}
           with:
             tag_name: pull-${{ github.ref_name }}  # 指定發行版的標籤名稱
-            release_name: Release  # 指定發行版的名稱
+            release_name: Release-${{ github.job_workflow_sha }}  # 指定發行版的名稱
             body: |
               自動編譯版本
             draft: false
