@@ -56,10 +56,6 @@ jobs:
         - name: init
           run: |
 
-        - name: Set Current Time
-          id: set_time
-          run: ::set-output name=current_time::$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-
         - name: Create Release
           id: create_release
           uses: actions/create-release@v1.1.4
@@ -73,9 +69,9 @@ jobs:
             draft: false
             prerelease: false
 
-        - run: |
-            cd
-            dir /s
+        # - run: |
+        #     cd
+        #     dir /s
 
         - name: Upload Release Asset
           uses: actions/upload-release-asset@v1.0.2
