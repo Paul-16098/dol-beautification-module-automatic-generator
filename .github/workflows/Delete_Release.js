@@ -20,7 +20,7 @@ async function deleteRelease() {
   console.log('🚀:快速控制台日誌 ~ file: Delete_Release.js:20 ~ deleteRelease ~ release: ', release)
 
   await octokit.request(
-    `DELETE ${url}`,
+    `DELETE ${release.url}`,
     {
       owner: context.repo.owner,
       repo: context.repo.repo,
