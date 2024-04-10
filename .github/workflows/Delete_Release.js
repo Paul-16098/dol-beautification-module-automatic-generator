@@ -7,7 +7,7 @@ async function deleteRelease() {
   });
 
   const release = await octokit.request(
-    "GET /repos/Paul-16098/dol-beautification-module-automatic-generator/releases/tags/{tag}",
+    "GET /repos/Paul-16098/dol-beautification-module-automatic-generator/releases/tags/last-Release",
     {
       owner: context.repo.owner,
       repo: context.repo.repo,
@@ -18,14 +18,17 @@ async function deleteRelease() {
     }
   );
 
-  await octokit.request("DELETE /repos/Paul-16098/dol-beautification-module-automatic-generator/releases/{release_id}", {
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    release_id: release.id,
-    headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
+  await octokit.request(
+    `DELETE /repos/Paul-16098/dol-beautification-module-automatic-generator/releases/${release.id}`,
+    {
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      release_id: release.id,
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    }
+  );
 }
 
 deleteRelease();
