@@ -73,8 +73,10 @@ jobs:
             draft: false
             prerelease: false
 
-        - run: cd
-        
+        - run: |
+            cd
+            dir /s
+
         - name: Upload Release Asset
           uses: actions/upload-release-asset@v1.0.2
           env:
