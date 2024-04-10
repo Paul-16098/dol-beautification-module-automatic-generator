@@ -18,10 +18,13 @@ async function deleteRelease() {
     }
   );
 
-  await octokit.repos.deleteRelease({
+  await octokit.request("DELETE /repos/{owner}/{repo}/releases/{release_id}", {
     owner: context.repo.owner,
     repo: context.repo.repo,
     release_id: release.id,
+    headers: {
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
   });
 }
 
