@@ -60,9 +60,7 @@ jobs:
 
         - name: Delete Release
           run: |
-              node .github\workflows\Delete_Release.js
-          # with:
-          #   github-token: ${{ secrets.TOKEN }}
+              .github\workflows\Delete_Release.bat
         
         - name: Create Release
           id: create_release
