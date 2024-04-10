@@ -18,17 +18,12 @@ async function deleteRelease() {
       },
     }
   );
-  // console.log(
-  //   "🚀:快速控制台日誌 ~ file: Delete_Release.js:20 ~ deleteRelease ~ release: ",
-  //   release
-  // );
   console.log(
-    "🚀:快速控制台日誌 ~ file: Delete_Release.js:28 ~ deleteRelease ~ release.url: ",
-    release.url
+    "🚀:快速控制台日誌 ~ file: Delete_Release.js:20 ~ deleteRelease ~ context: ",
+    context
   );
-
   await octokit.request(`DELETE ${release.url}`, {
-    owner: release.author.login,
+    owner: context.repo.owner,
     repo: context.repo.repo,
     release_id: release.id,
     headers: {
