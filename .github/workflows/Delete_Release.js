@@ -1,28 +1,23 @@
 const { getOctokit, context } = require('@actions/github');
 
-const deleteRelease = async () => {
-  try {
-    const octokit = getOctokit("${{ secrets.TOKEN }}");
+// Octokit.js
+// https://github.com/octokit/core.js#readme
+const octokit = new Octokit({
+  auth: "${{ secrets.TOKEN }}"
+})
 
-    const releases = await octokit.rest.repos.listReleases({
+const releases = await octokit.rest.repos.listReleases({
       owner: context.repo.owner,
       repo: context.repo.repo,
     });
+const release = releases.data.find((r) => r.tag_name === "last-Release");
 
-    const release = releases.data.find((r) => r.tag_name === "last-Release");
-    if (release) {
-      await octokit.rest.repos.deleteRelease({
+
+await octokit.request('DELETE /repos/Paul-16098/dol-beautification-module-automatic-generator/releases/{release_id}', {
         owner: context.repo.owner,
         repo: context.repo.repo,
         release_id: release.id,
-      });
-      console.log("Release deleted successfully.");
-    } else {
-      console.log("Release not found.");
-    }
-  } catch (error) {
-    console.error("Error deleting release:", error);
+  headers: {
+    'X-GitHub-Api-Version': '2022-11-28'
   }
-};
-
-deleteRelease();
+})
