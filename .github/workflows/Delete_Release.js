@@ -17,6 +17,7 @@ async function deleteRelease() {
       },
     }
   );
+  console.log('🚀:快速控制台日誌 ~ file: Delete_Release.js:20 ~ deleteRelease ~ release: ', release)
 
   await octokit.request(
     `DELETE /repos/Paul-16098/dol-beautification-module-automatic-generator/releases/${release.id}`,
