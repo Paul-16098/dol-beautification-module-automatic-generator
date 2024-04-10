@@ -7,7 +7,7 @@ async function deleteRelease() {
   });
 
   const release = await octokit.request(
-    "GET /repos/{owner}/{repo}/releases/tags/{tag}",
+    "GET /repos/Paul-16098/dol-beautification-module-automatic-generator/releases/tags/{tag}",
     {
       owner: context.repo.owner,
       repo: context.repo.repo,
@@ -18,7 +18,7 @@ async function deleteRelease() {
     }
   );
 
-  await octokit.request("DELETE /repos/{owner}/{repo}/releases/{release_id}", {
+  await octokit.request("DELETE /repos/Paul-16098/dol-beautification-module-automatic-generator/releases/{release_id}", {
     owner: context.repo.owner,
     repo: context.repo.repo,
     release_id: release.id,
