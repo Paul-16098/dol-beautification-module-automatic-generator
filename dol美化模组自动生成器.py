@@ -51,13 +51,14 @@ def main():
 
     os.makedirs('img', exist_ok=True)
 
-    output_dict = {}
     
     logger.log_("===========================")
     logger.log_("dol美化模组自动生成器")
     logger.log_(f"v{ver}    By Paul-16098")
     logger.log_("===========================")
     
+    
+    output_dict = {}
     while True:
         output_dict['name'] = logger.input_('請輸入模組名稱: ')
         output_dict['version'] = logger.input_('請輸入類似於1.0.0的模組版本號: ')
