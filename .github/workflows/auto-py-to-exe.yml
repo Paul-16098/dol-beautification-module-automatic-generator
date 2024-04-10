@@ -40,10 +40,6 @@ jobs:
     - name: py to exe
       run: pyinstaller --noconfirm --console --icon "Vrelicon.ico" --onefile "dol美化模组自动生成器.py"
 
-    - run: |
-        cd
-        dir /s
-
     - name: del temp
       run: |
         del build /f /s /q
@@ -53,7 +49,7 @@ jobs:
 
     - run: |
         cd
-        dir /s
+        dir
 
   Release:
     needs: build  # 添加 needs 關鍵字，指定依賴於 build 作業
