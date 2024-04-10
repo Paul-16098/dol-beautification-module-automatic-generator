@@ -6,11 +6,17 @@ async function deleteRelease() {
     auth: process.env.TOKEN,
   });
 
-  const releases = await octokit.repos.listReleases({
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-  });
-  const release = releases.data.find((r) => r.tag_name === "last-Release");
+  const release = await octokit.request(
+    "GET /repos/{owner}/{repo}/releases/tags/{tag}",
+    {
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      tag: "last-Release",
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    }
+  );
 
   await octokit.repos.deleteRelease({
     owner: context.repo.owner,
