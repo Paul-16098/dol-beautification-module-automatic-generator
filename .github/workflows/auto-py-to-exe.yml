@@ -49,18 +49,11 @@ jobs:
     - run: |
         git push -v --all
 
-  Release:
-    needs: build  # 添加 needs 關鍵字，指定依賴於 build 作業
-    runs-on: [windows-latest]
-    
-    steps:
-        - uses: actions/checkout@v4.1.2
-
-        - uses: marvinpinto/action-automatic-releases@latest
-          with:
-            repo_token: "${{ secrets.GITHUB_TOKEN }}"
-            automatic_release_tag: "latest-Release"
-            prerelease: false
-            title: "最新的自動編譯版本"
-            files: |
-                dol美化模组自动生成器.exe
+    - uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest-Release"
+        prerelease: false
+        title: "最新的自動編譯版本"
+        files: |
+            dol美化模组自动生成器.exe
