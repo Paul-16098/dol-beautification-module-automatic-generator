@@ -7,8 +7,7 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
+permissions: write-all
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}
@@ -57,25 +56,11 @@ jobs:
         - name: init
           run: |
 
-        - name: Create Release
-          id: create_release
-          uses: actions/create-release@v1.1.4
-          env:
-            GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        - uses: marvinpinto/action-automatic-releases@latest
           with:
-            tag_name: pull-${{ github.ref_name }}  # 指定發行版的標籤名稱
-            release_name: Release-${{ github.sha }}  # 指定發行版的名稱
-            body: |
-              自動編譯版本
-            draft: false
-            prerelease: false
-
-        - name: Upload Release Asset
-          uses: actions/upload-release-asset@v1.0.2
-          env:
-            GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: dol美化模组自动生成器.exe
-            asset_name: dol美化模组自动生成器.exe
-            asset_content_type: application/octet-stream
+            repo_token: "${{ secrets.GITHUB_TOKEN }}"
+            automatic_release_tag: "latest"
+            prerelease: true
+            title: "Development Build"
+            files: |
+                dol美化模组自动生成器.exe
