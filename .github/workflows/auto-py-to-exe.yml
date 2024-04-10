@@ -58,7 +58,7 @@ jobs:
 
         - name: Set Commit SHA
           id: Set_Commit_SHA
-          run: echo "::set-output name=COMMIT_SHA::$(echo ${{ github.sha }} | cut -c 1-8)"
+          run: "::set-output name=COMMIT_SHA::$(echo ${{ github.sha }} | cut -c 1-8)"
 
         - name: Create Release
           id: create_release
