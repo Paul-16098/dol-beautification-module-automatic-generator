@@ -59,6 +59,8 @@ jobs:
               npm install @octokit/core
 
         - name: Delete Release
+          env:
+            GITHUB_TOKEN: ${{ secrets.TOKEN }}
           run: |
               .github\workflows\Delete_Release.bat
         
