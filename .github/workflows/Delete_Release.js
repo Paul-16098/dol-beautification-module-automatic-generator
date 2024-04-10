@@ -14,22 +14,24 @@ async function deleteRelease() {
       tag: "last-Release",
       headers: {
         "X-GitHub-Api-Version": "2022-11-28",
+        "content-type": "application/json; charset=utf-8",
       },
     }
   );
-  console.log('🚀:快速控制台日誌 ~ file: Delete_Release.js:20 ~ deleteRelease ~ release: ', release)
+  console.log(
+    "🚀:快速控制台日誌 ~ file: Delete_Release.js:20 ~ deleteRelease ~ release: ",
+    release
+  );
 
-  await octokit.request(
-    `DELETE ${release.url}`,
-    {
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      release_id: release.id,
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-    }
-  );
+  await octokit.request(`DELETE ${release.url}`, {
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    release_id: release.id,
+    headers: {
+      "X-GitHub-Api-Version": "2022-11-28",
+      "content-type": "application/json; charset=utf-8",
+    },
+  });
 }
 
 deleteRelease();
