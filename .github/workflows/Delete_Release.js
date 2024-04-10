@@ -28,7 +28,7 @@ async function deleteRelease() {
   );
 
   await octokit.request(`DELETE ${release.url}`, {
-    owner: context.repo.owner,
+    owner: release.author.login,
     repo: context.repo.repo,
     release_id: release.id,
     headers: {
