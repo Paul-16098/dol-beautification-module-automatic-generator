@@ -65,7 +65,7 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.TOKEN }}
           with:
             tag_name: pull-${{ env.COMMIT_SHA }}  # 指定發行版的標籤名稱
-            release_name: ${{ github }}-Release  # 指定發行版的名稱
+            release_name: ${{ env.COMMIT_SHA }}-Release  # 指定發行版的名稱
             body: |
               自動編譯版本
             draft: false
