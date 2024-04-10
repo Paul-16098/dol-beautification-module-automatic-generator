@@ -1,4 +1,4 @@
-const { getOctokit, context } = require("@actions/github");
+const { Octokit, context } = require("@actions/github");
 
 async function deleteRelease() {
   const octokit = new Octokit({
