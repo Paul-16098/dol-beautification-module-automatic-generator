@@ -37,14 +37,14 @@ jobs:
     - name: py to exe
       run: |
           chcp 65001
-          pyinstaller --noconfirm --onefile --console --icon "Vrelicon.ico"  "dol美化模组自动生成器.py"
+          pyinstaller --noconfirm --onefile --console --icon "Vrelicon.ico"  "dol-beautification-module-automatic-generator.py"
 
     - name: del temp
       run: |
         del build /f /s /q
         rmdir build /s /q
-        del dol美化模组自动生成器.spec /f /s /q
-        copy /v /y dist\dol美化模组自动生成器.exe .
+        del dol-beautification-module-automatic-generator.spec /f /s /q
+        copy /v /y dist\dol-beautification-module-automatic-generator.exe .
 
     - name: push
       run: |
@@ -58,4 +58,4 @@ jobs:
         prerelease: false
         title: "最新的自動編譯版本"
         files: |
-            dol美化模组自动生成器.exe
+            dol-beautification-module-automatic-generator.exe
