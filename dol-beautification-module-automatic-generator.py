@@ -24,7 +24,6 @@ def main():
     # 註冊清理函數
     atexit.register(cleanup)
 
-    @retry()
     def zip_files_and_folders(file_paths, zip_name):
         with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for file_path in file_paths:
@@ -38,7 +37,6 @@ def main():
                     except FileNotFoundError:
                         logger.log_(f"檔案不存在: {file_path}", 'warn')
 
-    @retry()
     def list_files_and_subdirectories(directory, output_dict):
         for root, dirs, files in os.walk(directory):
             for file in files:

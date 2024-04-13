@@ -7,7 +7,7 @@ import atexit
 import shutil
 
 class logger:
-    ver = "1.0.4.0"
+    ver = "1.0.5.0"
     def __init__(self, debug = False, temp_path = 'temp') -> None: # 初始化
         try:
             # 初始化 colorama
@@ -34,8 +34,8 @@ class logger:
             self.write_log(str(e), type="error")
             # os.unlink(self._temp_path)
         except ValueError as e:
-            # self.write_log(str(e), type="error")
-            os.unlink(self._temp_path)
+            self.write_log(str(e), type="error")
+            # os.unlink(self._temp_path)
 
     def write_log(self, message: str, type='log', type2 = None, z = None):
         r"""
