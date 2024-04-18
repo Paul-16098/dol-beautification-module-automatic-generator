@@ -55,7 +55,7 @@ jobs:
         git status
         git merge main
         git add .
-        git commit -m "Merge changes"
+        git commit -m "GitHub Actions Merge changes"
         git push origin HEAD:main
 
     - name: releases
