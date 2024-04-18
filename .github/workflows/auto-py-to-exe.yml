@@ -30,8 +30,6 @@ jobs:
       with:
         python-version: "3.12"
 
-    - run: git branch
-
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -50,7 +48,11 @@ jobs:
 
     - name: push
       run: |
-        git push -v --all
+        git push origin HEAD:main
+        git checkout origin/main
+        git merge main
+        git commit
+        git push origin HEAD:main
 
     - name: releases
       uses: marvinpinto/action-automatic-releases@latest
