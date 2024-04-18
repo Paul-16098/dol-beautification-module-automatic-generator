@@ -39,11 +39,7 @@ jobs:
           chcp 65001
           pyinstaller --noconfirm --onefile --console --icon "Vrelicon.ico"  "dol-beautification-module-automatic-generator.py"
 
-    - name: del temp
-      run: |
-        del build /f /s /q
-        rmdir build /s /q
-        del dol-beautification-module-automatic-generator.spec /f /s /q
+    - run: |
         copy /v /y dist\dol-beautification-module-automatic-generator.exe .
 
     - name: push
