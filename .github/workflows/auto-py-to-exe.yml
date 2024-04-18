@@ -54,7 +54,8 @@ jobs:
         git checkout origin/main
         git status
         git merge main
-        git commit
+        git add .
+        git commit -m "Merge changes"
         git push origin HEAD:main
 
     - name: releases
