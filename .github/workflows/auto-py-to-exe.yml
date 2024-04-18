@@ -54,7 +54,7 @@ jobs:
         git add .
         git commit -m "GitHub Actions Merge changes"
         git push origin HEAD:main
-        git pull main -v
+        git pull origin main -v
 
     - name: releases
       uses: marvinpinto/action-automatic-releases@latest
