@@ -13,7 +13,7 @@ logger = logger()
 
 @get_time
 def main():
-    ver = "1.0.0.0"
+    ver = "1.0.1.0"
     temp = 'temp'
     readme = ['LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
 
@@ -43,6 +43,7 @@ def main():
                 file_path = os.path.relpath(os.path.join(root, file), directory)
                 file_extension = os.path.splitext(file_path)[1].lower()
                 if file_extension != '.png' and file_extension != '.gif':
+                    logger.log_(f"img\\{file_path}: 擴展名不是 .png 或 .gif, 添加到\"additionFile\"")
                     output_dict["additionFile"].append('img/' + file_path.replace("\\", "/"))
                 else:
                     output_dict["imgFileList"].append('img/' + file_path.replace("\\", "/"))
