@@ -13,7 +13,7 @@ logger = logger()
 
 @get_time
 def main():
-    ver = "1.0.1.0"
+    ver = "1.0.2.0"
     temp = 'temp'
     readme = ['LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
 
