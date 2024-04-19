@@ -61,6 +61,9 @@ def main():
     while True:
         output_dict['name'] = logger.input_('請輸入模組名稱: ')
         output_dict['version'] = logger.input_('請輸入類似於1.0.0的模組版本號: ')
+        # 壓縮後的文件名
+        zip_name = output_dict['name'] + f"-({output_dict['version']})" + '.mod.zip'
+        logger.log_(f"最後的檔案名稱應為: {zip_name}")
         yne = logger.input_("確定? (Yes/Not/Exit): ", "log", "red").lower()
         if yne in ("y", "yes"):
             break
@@ -102,19 +105,17 @@ def main():
     # 要壓縮的文件和文件夾路徑列表
     file_paths = ['img', f'{temp}\\boot.json', 'LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
 
-    # 壓縮後的文件名
-    zip_name = output_dict['name'] + '.mod.zip'
-
     zip_files_and_folders(file_paths, os.path.join(temp, zip_name))
 
     if os.path.exists(zip_name) is not False: # 如果zip_name存在
         os.remove(zip_name) # 刪除 zip_name
     shutil.move(os.path.join(temp, zip_name), os.curdir)
     print('')
-    logger.log_(f'模组生成完成: {output_dict["name"] + ".mod.zip"}')
+    logger.log_(f'模组生成完成: {zip_name}')
     logger.log_(f'檔案大小: {os.path.getsize(zip_name)}位元組')
 
     os.system("pause")
 
 if __name__ == '__main__':
     main()
+    # input()
