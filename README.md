@@ -1,4 +1,6 @@
 # dol美化模組自動生成器
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FPaul-16098%2Fdol-beautification-module-automatic-generator.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FPaul-16098%2Fdol-beautification-module-automatic-generator?ref=badge_shield)
+
 
 ---
 
@@ -35,3 +37,7 @@
 
 如果有'README\.md', 'README.txt'會把他一拼壓縮,
 檢查副檔名時不分大小寫
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FPaul-16098%2Fdol-beautification-module-automatic-generator.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FPaul-16098%2Fdol-beautification-module-automatic-generator?ref=badge_large)
