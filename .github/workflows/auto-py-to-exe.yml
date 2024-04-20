@@ -37,7 +37,7 @@ jobs:
     - name: py to exe
       run: |
           chcp 65001
-          pyinstaller --noconfirm --onefile --console --icon "Vrelicon.ico"  "dol-beautification-module-automatic-generator.py"
+          pyinstaller --noconfirm --onefile --console --add-data "License.txt;." --icon "Vrelicon.ico"  "dol-beautification-module-automatic-generator.py"
 
     - run: |
         copy /v /y dist\dol-beautification-module-automatic-generator.exe .
