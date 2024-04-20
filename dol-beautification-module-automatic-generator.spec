@@ -5,7 +5,7 @@ a = Analysis(
     ['dol-beautification-module-automatic-generator.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('License.txt', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
