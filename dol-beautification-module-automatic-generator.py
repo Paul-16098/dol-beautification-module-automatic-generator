@@ -35,7 +35,7 @@ def main():
                     try:
                         zipf.write(file_path, os.path.basename(file_path))
                     except FileNotFoundError:
-                        logger.log_(f"檔案不存在: {file_path}", 'warn')
+                        logger.log_(f"檔案不存在: {file_path}")
 
     def list_files_and_subdirectories(directory, output_dict):
         for root, dirs, files in os.walk(directory):
