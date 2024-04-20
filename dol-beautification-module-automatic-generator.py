@@ -13,7 +13,15 @@ logger = logger()
 
 @get_time
 def main():
-    ver = "1.0.3.0"
+    '''
+    Copyright (C) 2024 Paul-16098
+
+    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+    '''
+    
+    ver = "1.0.4.0"
     temp = 'temp'
     License = "GPL-2.0"
     readme = ['LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
