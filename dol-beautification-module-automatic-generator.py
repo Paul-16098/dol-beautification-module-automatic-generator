@@ -13,8 +13,9 @@ logger = logger()
 
 @get_time
 def main():
-    ver = "1.0.2.0"
+    ver = "1.0.3.0"
     temp = 'temp'
+    License = "GPL-2.0"
     readme = ['LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
 
     @retry()
@@ -54,6 +55,7 @@ def main():
     logger.log_("===========================")
     logger.log_("dol美化模组自动生成器")
     logger.log_(f"v{ver}    By Paul-16098")
+    logger.log_(f"License: {License}")
     logger.log_("===========================")
     
     
