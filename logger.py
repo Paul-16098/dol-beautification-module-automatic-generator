@@ -7,8 +7,15 @@ import atexit
 import shutil
 
 class logger:
-    ver = "1.0.5.0"
-    def __init__(self, debug = False, temp_path = 'temp') -> None: # 初始化
+    ver = "1.0.7.1"
+    def __init__(self, debug: bool = False, temp_path: str = "temp", log_file: str = "log.log") -> None: # 初始化
+        """init
+
+        Args:
+            debug (bool, optional): if True, the log is not been del. Defaults to False.
+            temp_path (str, optional): Temporary path to store log files. Defaults to "temp".
+            log_file (str, optional): Log file name. Defaults to "log.log".
+        """
         try:
             # 初始化 colorama
             colorama.init()
@@ -16,30 +23,39 @@ class logger:
             self._debug = debug
             os.makedirs(f'{self._temp_path}', exist_ok=True)
             atexit.register(self.del_temp)
-            self._log_path = os.path.join(self._temp_path, 'log.log')
+            self._log_path = os.path.join(self._temp_path, log_file)
             self._log_file = open(self._log_path, "w", encoding='utf-8')
             self.write_log('========= init done =========')
         except Exception as e:
             self.log_(f'init error, {e}', 'error')
     
-    def del_temp(self):
-        r"""
-        del temp
+    def del_temp(self) -> bool:
+        """del all temp
+
+        Raises:
+            e: all error
+
+        Returns:
+            bool: If successful, return will be equal to True.
         """
         try:
             self._log_file.close()
             if self._debug == False:
                 shutil.rmtree(self._temp_path)
-        except PermissionError as e:
+            return True
+        except Exception as e:
             self.write_log(str(e), type="error")
-            # os.unlink(self._temp_path)
-        except ValueError as e:
-            self.write_log(str(e), type="error")
-            # os.unlink(self._temp_path)
+            raise e
 
-    def write_log(self, message: str, type='log', type2 = None, z = None):
-        r"""
-        write_log: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:{type2}][{type}]{z}: {message}\n
+    def write_log(self, message: object, type: str = 'log', type2 = None, z = None) -> None:
+        """write the log in log files:
+        {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:{type2}][{type}]{z}: {message}\n
+        
+        Args:
+            message (object): message
+            type (str, optional): _description_. Defaults to 'log'.
+            type2 (_type_, optional): _description_. Defaults to None.
+            z (_type_, optional): _description_. Defaults to None.
         """
         if self._log_file.closed:
             print("文件已關閉，無法寫入日誌")
@@ -52,7 +68,16 @@ class logger:
         self._log_file.write(f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")} [type:{type2}][{type}]{z}: {message}\n')
         self._log_file.flush()
     
-    def log_(self, message: str, type='log', color: str = "") -> None:
+    def _color(self, type: str, color: str) -> tuple[str, str]:
+        """Determine the displayed color based on type: str and color: str.
+
+        Args:
+            type (str): _description_
+            color (str, optional): _description_.
+
+        Returns:
+            tuple[str, str]: _description_
+        """
         color = color.upper()
         if color == "":
             if type == 'warn':
@@ -83,37 +108,35 @@ class logger:
                 color = Fore.CYAN
             elif color == "WHITE":
                 color = Fore.WHITE
+        return _color, color
+    
+    def log_(self, message: object, type: str = 'log', color: str = "") -> None:
+        """in cmd and log files write log
+
+        Args:
+            message (object): message
+            type (str, optional): _description_. Defaults to 'log'.
+            color (str, optional): _description_. Defaults to "".
+        """
+        message = str(message)
+        _color, color = self._color(type = type, color = color)
 
         print(color + message + Fore.RESET)
         self.write_log(message, type, "log", _color)
 
-    def input_(self, message: str, type='log', color: str = "") -> str:
-        color = color.upper()
-        if color == "":
-            _color = ""
-            if type == 'warn':
-                color = Fore.YELLOW  # 黃色
-            elif type == 'error':
-                color = Fore.RED  # 紅色
-        else:
-            _color = color
-            _color = f"[{_color}]"
-            if color=="RED":
-                color = Fore.RED # 紅色
-            elif color == "YELLOW":
-                color = Fore.YELLOW  # 黃色
-            elif color == "BLACK":
-                color = Fore.BLACK
-            elif color == "GREEN":
-                color = Fore.GREEN
-            elif color == "BLUE":
-                color = Fore.BLUE
-            elif color == "MAGENTA":
-                color = Fore.MAGENTA
-            elif color == "CYAN":
-                color = Fore.CYAN
-            elif color == "WHITE":
-                color = Fore.WHITE
+    def input_(self, message: object, type: str = 'log', color: str = "") -> str:
+        """in cmd and log files write log
+
+        Args:
+            message (object): message
+            type (str, optional): _description_. Defaults to 'log'.
+            color (str, optional): _description_. Defaults to "".
+
+        Returns:
+            str: from input return result
+        """
+        message = str(message)
+        _color, color = self._color(type = type, color = color)
 
         self.write_log(message, type, "input", _color)
         r = input(color + message + Fore.RESET)
