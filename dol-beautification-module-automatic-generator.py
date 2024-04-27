@@ -4,12 +4,12 @@ import json
 import shutil
 import zipfile
 import atexit
-from logger import logger
-from retry import retry # type: ignore
+from log import logger
+from retry import * # type: ignore
 from timing import get_time
 
 # 初始化
-logger = logger()
+logger_obj = logger()
 
 @get_time
 def main():
@@ -28,10 +28,10 @@ def main():
     License = "MIT"
     readme = ['LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
 
-    @retry()
+    @retry(retries=10) # type: ignore
     def cleanup():
             # 刪除臨時目錄
-            logger.del_temp()
+            logger_obj.del_temp()
     # 註冊清理函數
     atexit.register(cleanup)
 
@@ -46,7 +46,7 @@ def main():
                     try:
                         zipf.write(file_path, os.path.basename(file_path))
                     except FileNotFoundError:
-                        logger.log_(f"檔案不存在: {file_path}")
+                        logger_obj.log_(f"檔案不存在: {file_path}")
 
     def list_files_and_subdirectories(directory, output_dict):
         for root, dirs, files in os.walk(directory):
@@ -54,7 +54,7 @@ def main():
                 file_path = os.path.relpath(os.path.join(root, file), directory)
                 file_extension = os.path.splitext(file_path)[1].lower()
                 if file_extension != '.png' and file_extension != '.gif':
-                    logger.log_(f"img\\{file_path}: 擴展名不是 .png 或 .gif, 添加到\"additionFile\"")
+                    logger_obj.log_(f"img\\{file_path}: 擴展名不是 .png 或 .gif, 添加到\"additionFile\"")
                     output_dict["additionFile"].append('img/' + file_path.replace("\\", "/"))
                 else:
                     output_dict["imgFileList"].append('img/' + file_path.replace("\\", "/"))
@@ -62,27 +62,27 @@ def main():
     os.makedirs('img', exist_ok=True)
 
     
-    logger.log_("===========================")
-    logger.log_("dol美化模组自动生成器")
-    logger.log_(f"v{ver}    By Paul-16098")
-    logger.log_(f"License: {License}")
-    logger.log_("===========================")
+    logger_obj.log_("===========================")
+    logger_obj.log_("dol美化模组自动生成器")
+    logger_obj.log_(f"v{ver}    By Paul-16098")
+    logger_obj.log_(f"License: {License}")
+    logger_obj.log_("===========================")
     
     
     output_dict = {}
     while True:
-        output_dict['name'] = logger.input_('請輸入模組名稱: ')
-        output_dict['version'] = logger.input_('請輸入類似於1.0.0的模組版本號: ')
+        output_dict['name'] = logger_obj.input_('請輸入模組名稱: ')
+        output_dict['version'] = logger_obj.input_('請輸入類似於1.0.0的模組版本號: ')
         # 壓縮後的文件名
-        zip_name = output_dict['name'] + f"-({output_dict['version']})" + '.mod.zip'
-        logger.log_(f"最後的檔案名稱應為: {zip_name}")
-        yne = logger.input_("確定? (Yes/Not/Exit): ", "log", "red").lower()
+        zip_name = output_dict['name'] + f"-(v{output_dict['version']})" + '.mod.zip'
+        logger_obj.log_(f"最後的檔案名稱應為: {zip_name}")
+        yne = logger_obj.input_("確定? (Yes/Not/Exit): ", "log", "red").lower()
         if yne in ("y", "yes"):
             break
         elif yne in ("e", "exit"):
             cleanup()
             os._exit(0)
-    logger.log_('模組生成中請稍等...')
+    logger_obj.log_('模組生成中請稍等...')
     output_dict['styleFileList'] = []
     output_dict['scriptFileList'] = []
     output_dict['tweeFileList'] = []
@@ -123,8 +123,8 @@ def main():
         os.remove(zip_name) # 刪除 zip_name
     shutil.move(os.path.join(temp, zip_name), os.curdir)
     print('')
-    logger.log_(f'模组生成完成: {zip_name}')
-    logger.log_(f'檔案大小: {os.path.getsize(zip_name)}位元組')
+    logger_obj.log_(f'模组生成完成: {zip_name}')
+    logger_obj.log_(f'檔案大小: {os.path.getsize(zip_name)}位元組')
 
     os.system("pause")
 
