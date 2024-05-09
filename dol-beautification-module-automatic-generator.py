@@ -4,12 +4,13 @@ import json
 import shutil
 import zipfile
 import atexit
-from log import logger
-from retry import * # type: ignore
-from timing import get_time
+from log import logger  # type: ignore
+from retry import *  # type: ignore
+from timing import get_time  # type: ignore
 
 # 初始化
 logger_obj = logger()
+
 
 @get_time
 def main():
@@ -22,16 +23,17 @@ def main():
 
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     '''
-    
-    ver = "1.0.5.0"
+
+    ver = "1.0.6.0"
     temp = 'temp'
     License = "MIT"
-    readme = ['LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
+    readme = ['LICENSE', 'LICENSE.txt',
+              'README.md', 'README.txt', 'CREDITS.md']
 
-    @retry(retries=10) # type: ignore
+    @retry(retries=10)  # type: ignore
     def cleanup():
-            # 刪除臨時目錄
-            logger_obj.del_temp()
+        # 刪除臨時目錄
+        logger_obj.del_temp()
     # 註冊清理函數
     atexit.register(cleanup)
 
@@ -41,7 +43,8 @@ def main():
                 if os.path.isdir(file_path):
                     for root, dirs, files in os.walk(file_path):
                         for file in files:
-                            zipf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), os.path.dirname(file_path)))
+                            zipf.write(os.path.join(root, file), os.path.relpath(
+                                os.path.join(root, file), os.path.dirname(file_path)))
                 else:
                     try:
                         zipf.write(file_path, os.path.basename(file_path))
@@ -51,30 +54,33 @@ def main():
     def list_files_and_subdirectories(directory, output_dict):
         for root, dirs, files in os.walk(directory):
             for file in files:
-                file_path = os.path.relpath(os.path.join(root, file), directory)
+                file_path = os.path.relpath(
+                    os.path.join(root, file), directory)
                 file_extension = os.path.splitext(file_path)[1].lower()
                 if file_extension != '.png' and file_extension != '.gif':
-                    logger_obj.log_(f"img\\{file_path}: 擴展名不是 .png 或 .gif, 添加到\"additionFile\"")
-                    output_dict["additionFile"].append('img/' + file_path.replace("\\", "/"))
+                    logger_obj.log_(
+                        f"img\\{file_path}: 擴展名不是 .png 或 .gif, 添加到\"additionFile\"")
+                    output_dict["additionFile"].append(
+                        'img/' + file_path.replace("\\", "/"))
                 else:
-                    output_dict["imgFileList"].append('img/' + file_path.replace("\\", "/"))
+                    output_dict["imgFileList"].append(
+                        'img/' + file_path.replace("\\", "/"))
 
     os.makedirs('img', exist_ok=True)
 
-    
     logger_obj.log_("===========================")
     logger_obj.log_("dol美化模组自动生成器")
     logger_obj.log_(f"v{ver}    By Paul-16098")
     logger_obj.log_(f"License: {License}")
     logger_obj.log_("===========================")
-    
-    
+
     output_dict = {}
     while True:
         output_dict['name'] = logger_obj.input_('請輸入模組名稱: ')
         output_dict['version'] = logger_obj.input_('請輸入類似於1.0.0的模組版本號: ')
         # 壓縮後的文件名
-        zip_name = output_dict['name'] + f"-(v{output_dict['version']})" + '.mod.zip'
+        zip_name = output_dict['name'] + \
+            f"-(v{output_dict['version']})" + '.mod.zip'
         logger_obj.log_(f"最後的檔案名稱應為: {zip_name}")
         yne = logger_obj.input_("確定? (Yes/Not/Exit): ", "log", "red").lower()
         if yne in ("y", "yes"):
@@ -89,22 +95,22 @@ def main():
     output_dict['additionFile'] = []
     output_dict['imgFileList'] = []
     for file_path in readme:
-        if os.path.exists(file_path) is not False: # 如果file_path存在
+        if os.path.exists(file_path) is not False:  # 如果file_path存在
             output_dict['additionFile'].append(file_path)
     list_files_and_subdirectories('img', output_dict)
     output_dict['addonPlugin'] = [
         {
-        "modName": "ModLoader DoL ImageLoaderHook",
-        "addonName": "ImageLoaderAddon",
-        "modVersion": "^2.3.0",
-        "params": [
-        ]
+            "modName": "ModLoader DoL ImageLoaderHook",
+            "addonName": "ImageLoaderAddon",
+            "modVersion": "^2.3.0",
+            "params": [
+            ]
         }
     ]
     output_dict['dependenceInfo'] = [
         {
-        "modName": "ModLoader DoL ImageLoaderHook",
-        "version": "^2.3.0"
+            "modName": "ModLoader DoL ImageLoaderHook",
+            "version": "^2.3.0"
         }
     ]
 
@@ -115,18 +121,22 @@ def main():
         json.dump(output_dict, file, indent=2, ensure_ascii=False)
 
     # 要壓縮的文件和文件夾路徑列表
-    file_paths = ['img', f'{temp}\\boot.json', 'LICENSE', 'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
+    file_paths = ['img', f'{temp}\\boot.json', 'LICENSE',
+                  'LICENSE.txt', 'README.md', 'README.txt', 'CREDITS.md']
 
     zip_files_and_folders(file_paths, os.path.join(temp, zip_name))
 
-    if os.path.exists(zip_name) is not False: # 如果zip_name存在
-        os.remove(zip_name) # 刪除 zip_name
+    if os.path.exists(zip_name) is not False:  # 如果zip_name存在
+        os.remove(zip_name)  # 刪除 zip_name
     shutil.move(os.path.join(temp, zip_name), os.curdir)
     print('')
     logger_obj.log_(f'模组生成完成: {zip_name}')
     logger_obj.log_(f'檔案大小: {os.path.getsize(zip_name)}位元組')
 
+    shutil.rmtree(temp)
+
     os.system("pause")
+
 
 if __name__ == '__main__':
     main()
