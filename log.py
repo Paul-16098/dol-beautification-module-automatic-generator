@@ -16,7 +16,7 @@ _input = input
 class logger:
     """logger mod
     """
-    ver = "2.0.10.0"
+    ver = "2.0.12.0"
 
     def __init__(self, debug: bool = False, temp_path: str = "temp", log_file: str = "log.log", is_log: bool = False, ignore_errors: bool = False):  # 初始化
         """init
@@ -25,7 +25,8 @@ class logger:
             debug (bool, optional): if True, the log is not been del. Defaults to False.
             temp_path (str, optional): Temporary path to store log files. Defaults to "temp".
             log_file (str, optional): Log file name. Defaults to "log.log".
-            is_log (bool, optional): _description_. Defaults to False.
+            is_log (bool, optional): write in the log files. Defaults to False.
+            ignore_errors (bool, optional): ignore errors. Defaults to False.
         """
         try:
             # 初始化 colorama
@@ -42,15 +43,13 @@ class logger:
                 self._log_path = os.path.join(self._temp_path, log_file)
                 self._log_file = open(self._log_path, "a", encoding='utf-8')
             self._closed = False
-            self.write_log('========= init done =========')
+            self.write_log('========= init done =========', type="info")
+            self.write_log(f"v{self.ver}", type="info")
         except Exception as e:
             self.log_(f'init error, {e}', 'error')
 
     def del_temp(self) -> bool:
         """del all temp
-
-        Raises:
-            e: all error
 
         Returns:
             bool: If successful, return will be equal to True.
@@ -77,15 +76,18 @@ class logger:
 
     def write_log(self, message: object, type: str = 'log', type2=None, z=None, x=None, time: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")) -> None:
         """write the log in log files:
-        [{datetime.now().strftime(
-            "%Y-%m-%d %H:%M:%S")}] [type:{type2}][{type}]{z}{x}: {message}\n
+        [{time}] [type:{type2}][{type}]{z}{x}: {message}\n
 
         Args:
-            message (object): _description_
+            message (object): message
             type (str, optional): _description_. Defaults to 'log'.
             type2 (_type_, optional): _description_. Defaults to None.
             z (_type_, optional): _description_. Defaults to None.
             x (_type_, optional): _description_. Defaults to None.
+            time (_type_, optional): _description_. Defaults to datetime.now().strftime("%Y-%m-%d %H:%M:%S").
+
+        Returns:
+            None
         """
         if self._is_log == False:
             return None
@@ -122,7 +124,7 @@ class logger:
 
         Args:
             type (str): _description_
-            color (str, optional): _description_.
+            color (str, optional): _description_. Defaults to "".
 
         Returns:
             tuple[str, str]: _description_
@@ -163,10 +165,14 @@ class logger:
         """in cmd and log files write log
 
         Args:
-            message (object): message
+            values (object): message
             type (str, optional): _description_. Defaults to 'log'.
             color (str, optional): _description_. Defaults to "".
             _x (str, optional): _description_. Defaults to "".
+            sep (str | None, optional): _description_. Defaults to " ".
+            end (str | None, optional): _description_. Defaults to "\n".
+            file (None, optional): _description_. Defaults to None.
+            flush (Literal[False], optional): _description_. Defaults to False.
         """
         _color, color = self._color(type=type, color=color)
         values = str(values)
@@ -179,13 +185,13 @@ class logger:
         """in cmd and log files write log
 
         Args:
-            message (object): message
+            prompt (object, optional): message. Defaults to "".
             type (str, optional): _description_. Defaults to 'log'.
             color (str, optional): _description_. Defaults to "".
             _x (str, optional): _description_. Defaults to "".
 
         Returns:
-            str: from input return result
+            str: from input return result.
         """
         message = str(prompt)
         _color, color = self._color(type=type, color=color)
@@ -201,11 +207,28 @@ class logger:
 
 
 def print(*values: object, sep: str | None = " ", end: str | None = "\n", file: None = None,):
-    logger_obj = logger(is_log=True, ignore_errors=True)
+    """Prints the values to a stream, or to sys.stdout by default.
+
+sep
+  string inserted between values, default a space.
+end
+  string appended after the last value, default a newline.
+file
+  a file-like object (stream); defaults to the current sys.stdout.
+flush
+  whether to forcibly flush the stream.
+    """
+    logger_obj = logger(is_log=False, ignore_errors=True)
     logger_obj.log_(*values, _x="[劫持print]", sep=sep,  # type: ignore
                     end=end, file=file)
 
 
 def input(prompt: object = ""):
-    logger_obj = logger(is_log=True, ignore_errors=True)
+    """Read a string from standard input. The trailing newline is stripped.
+
+The prompt string, if given, is printed to standard output without a trailing newline before reading input.
+
+If the user hits EOF (*nix: Ctrl-D, Windows: Ctrl-Z+Return), raise EOFError. On *nix systems, readline is used if available.
+    """
+    logger_obj = logger(is_log=False, ignore_errors=True)
     return logger_obj.input_(prompt, _x="[劫持input]")  # type: ignore
