@@ -12,11 +12,13 @@ __all__ = ["logger"]
 _print = print
 _input = input
 
+劫持_is_log = False
+
 
 class logger:
     """logger mod
     """
-    ver = "2.0.12.0"
+    ver = "2.0.13.0"
 
     def __init__(self, debug: bool = False, temp_path: str = "temp", log_file: str = "log.log", is_log: bool = False, ignore_errors: bool = False):  # 初始化
         """init
@@ -218,7 +220,7 @@ file
 flush
   whether to forcibly flush the stream.
     """
-    logger_obj = logger(is_log=False, ignore_errors=True)
+    logger_obj = logger(is_log=劫持_is_log, ignore_errors=True)
     logger_obj.log_(*values, _x="[劫持print]", sep=sep,  # type: ignore
                     end=end, file=file)
 
@@ -230,5 +232,5 @@ The prompt string, if given, is printed to standard output without a trailing ne
 
 If the user hits EOF (*nix: Ctrl-D, Windows: Ctrl-Z+Return), raise EOFError. On *nix systems, readline is used if available.
     """
-    logger_obj = logger(is_log=False, ignore_errors=True)
+    logger_obj = logger(is_log=劫持_is_log, ignore_errors=True)
     return logger_obj.input_(prompt, _x="[劫持input]")  # type: ignore
