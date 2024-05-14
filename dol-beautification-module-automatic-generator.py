@@ -4,12 +4,12 @@ import json
 import shutil
 import zipfile
 import atexit
-from log import logger  # type: ignore
+from paul_tools import Logger  # type: ignore
 from retry import *  # type: ignore
 from timing import get_time  # type: ignore
 
 # 初始化
-logger_obj = logger()
+logger_obj = Logger()
 
 
 @get_time
@@ -24,7 +24,7 @@ def main():
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     '''
 
-    ver = "1.0.6.0"
+    ver = "1.0.7.0"
     temp = 'temp'
     License = "MIT"
     readme = ['LICENSE', 'LICENSE.txt',
@@ -33,7 +33,7 @@ def main():
     @retry(retries=10)  # type: ignore
     def cleanup():
         # 刪除臨時目錄
-        logger_obj.del_temp()
+        shutil.rmtree("temp", ignore_errors=True)
     # 註冊清理函數
     atexit.register(cleanup)
 
