@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+# all
+from rich import inspect
+
 # logger
 import os
 import colorama
@@ -10,23 +13,24 @@ from colorama import Fore
 
 # i18n
 import json
-import locale  # type: ignore
-from enum import Enum
+import locale
 from pathlib import Path
 
-__all__ = [
-    "Logger",
-    "I18n"
-]
+"""Paul-16098 Tools
+"""
+
+__all__ = []
 
 
 class Logger:
-    """logger module
+    """A logger module 
+    By Paul-16098
     """
     ver = "2.0.17.0"
 
     __print = print
     __input = input
+    __init_i=0
 
     def __init__(self, debug: bool = False, temp_path: str = "temp", log_file: str = "log.log", is_log: bool = False, ignore_errors: bool = False):  # 初始化
         """init
@@ -39,6 +43,7 @@ class Logger:
             ignore_errors (bool, optional): ignore errors. Defaults to False.
         """
         try:
+            self.__init_i=self.__init_i+1
             # 初始化 colorama
             colorama.init()
             self.__i18n_obj = I18n()
@@ -53,7 +58,7 @@ class Logger:
             #     if debug:
             #         _print("e:", e)
             # if no_cofg:
-            self.cofg = {}
+            self.cofg: dict = dict()
             self.cofg["is_log"] = is_log
             self.cofg["temp_path"] = temp_path
             self.cofg["debug"] = debug
@@ -75,19 +80,16 @@ class Logger:
             self._closed = False
             self.log_file_name = log_file
             if self.cofg["debug"]:
-                self.log_('========= init done =========', type_="info")
+                self.log_(f'========= init done ({self.__init_i})=========', type_="info")
                 self.log_(f"v{self.ver}", type_="info")
                 self.log_(f"cofg: {self.cofg}", type_="info")
-                self.log_(
-                    f"SYS_LANG: {self.__i18n_obj._SYS_LANG}", type_="info")
             else:
-                self.write_log('========= init done =========', type_="info")
+                self.write_log(f'========= init done ({self.__init_i})=========', type_="info")
                 self.write_log(f"v{self.ver}", type_="info")
                 self.write_log(f"cofg: {self.cofg}", type_="info")
-                self.write_log(
-                    f"SYS_LANG: {self.__i18n_obj._SYS_LANG}", type_="info")
         except Exception as e:
-            self.log_(f'init error, {e}', 'error')
+            self.log_(f'init error, {e} No.{self.__init_i}', 'error')
+            return self.__init__()
 
     def exit(self) -> None:
         if self.cofg["debug"]:
@@ -115,11 +117,10 @@ class Logger:
             else:
                 if self.cofg["debug"]:
                     self.log_(
-                        self.__i18n_obj.locale(self.__i18n_obj.Langs.paul_tools__Logger__del_temp__not_call_this), type_="info")
+                        self.__i18n_obj.locale(self.__i18n_obj.Langs.paul_tools__Logger__del_temp__not_call_this), type_="info") # type: ignore
                 else:
                     self.write_log(
-                        self.__i18n_obj.locale(self.__i18n_obj.Langs.paul_tools__Logger__del_temp__not_call_this), type_="info")
-                # return False
+                        self.__i18n_obj.locale(self.__i18n_obj.Langs.paul_tools__Logger__del_temp__not_call_this), type_="info") # type: ignore
             if not self.cofg["debug"]:
                 # if True:
                 shutil.rmtree(self.cofg["temp_path"])
@@ -139,20 +140,18 @@ class Logger:
                 # os.system(f"rmdir /s /q {self._temp_path}")
             return False
 
-    def write_log(self, message: object, type_: str = 'log', type2_=None, z=None, x=None, time: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")) -> None:
+    def write_log(self, message: object = "", type_: str = 'log', type2_=None, z=None, x=None, time: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")) -> None:
         """write the log in log files:
-        [{time}] [type:{_type2}][{_type}]{z}{x}: {message}\n
+        [{time}] [type:{type2_}][{type_}]{
+                             z}{x}: {message}\\n
 
         Args:
-            message (object): message
+            message (object, optional): message. Defaults to "".
             type_ (str, optional): _description_. Defaults to 'log'.
             type2_ (_type_, optional): _description_. Defaults to None.
             z (_type_, optional): _description_. Defaults to None.
             x (_type_, optional): _description_. Defaults to None.
             time (_type_, optional): _description_. Defaults to datetime.now().strftime("%Y-%m-%d %H:%M:%S").
-
-        Returns:
-            None
         """
         if self.cofg["debug"]:
             self.__print("write_log run")
@@ -161,7 +160,7 @@ class Logger:
         if self._log_file.closed:
             if self._closed == False:
                 self.__print(self.__i18n_obj.locale(
-                    self.__i18n_obj.Langs.paul_tools__Logger__write_log__file_closed, self.log_file_name))
+                    self.__i18n_obj.Langs.paul_tools__Logger__write_log__file_closed, self.log_file_name)) # type: ignore
                 self._closed = True
                 return None
             else:
@@ -234,11 +233,11 @@ class Logger:
                 color = Fore.WHITE
         return color2, color
 
-    def log_(self, values: object = "", type_: str = 'log', color: str = "", _x: str = "", sep: str | None = " ", end: str | None = "\n", file: None = None, flush: Literal[False] = False) -> None:
+    def log_(self, values: object = "", type_: str = 'log', color: str = "", _x: str = "", sep: str = " ", end: str = "\n", file: None = None, flush: Literal[False] = False) -> None:
         """in cmd and log files write log
 
         Args:
-            values (object): message
+            values (object): message. Defaults to "".
             type_ (str, optional): _description_. Defaults to 'log'.
             color (str, optional): _description_. Defaults to "".
             _x (str, optional): _description_. Defaults to "".
@@ -286,11 +285,13 @@ class Logger:
 
 
 class I18n:
-    """i18n module
+    """A i18n module
+    By Paul-16098
     """
     ver = "1.0.0.0"
 
     def __init__(self) -> None:
+        # self.__logger_obj = Logger()
         """ LANGS """
         self._DIR_ROOT: Path = Path(__file__).parent
         self._DIR_LANGS_ROOT: Path = self._DIR_ROOT / "langs"
@@ -301,47 +302,35 @@ class I18n:
             f"{self._SYS_LANG}.json"
         self._EN_US_LANG_FILE: Path = self._SYS_LANG_FILE if self._SYS_LANG_FILE.exists(
         ) else self._DIR_LANGS_ROOT / "en_us.json"
+        # self.__logger_obj.write_log(
+        #     f"SYS_LANG: {self._SYS_LANG}", type_="info")
         if self._SYS_LANG_FILE.exists():
             with open(self._SYS_LANG_FILE, "r", encoding="utf-8") as fp:
                 self._LANGS = json.load(fp)
         else:
+            # self.__logger_obj.write_log("No SYS_LANG_FILE", type_="warn")
             self._LANGS = {}
         if self._EN_US_LANG_FILE.exists():
             with open(self._DIR_LANGS_ROOT / "en_us.json", "r", encoding="utf-8") as fp:
                 self._DEFAULT_LANGS = json.load(fp)
         else:
+            # self.__logger_obj.write_log("No EN_US_LANG_FILE", type_="warn")
             self._DEFAULT_LANGS = {}
 
-        # print("SYS_LANG: ", self.SYS_LANG)
+        self._DEFAULT_LANGS.update(self._LANGS)
+        self._LANGS = self._DEFAULT_LANGS
+        del self._DEFAULT_LANGS
 
-    class Langs(Enum):
-        # sys
-        updata = 0
-        any = 1
+    def locale(self, raw: str, *kwargs):
+        """get lang text
 
-        # {file_name}__{class_name}__{func}__{id}
-        paul_tools__Logger__del_temp__not_call_this = 100
-        paul_tools__Logger__write_log__file_closed = 101
-        pass
+        Args:
+            raw (str): the id
 
-    def locale(self, raw: Langs | str, *kwargs, DEFAULT_LANGS=False):
-        # print(raw)
-        # print(kwargs)
-        text = raw.name if isinstance(raw, self.Langs) else raw  # type: ignore
-        # print(text)
-        # print(self._LANGS)
-        if DEFAULT_LANGS:
-            _ = self._DEFAULT_LANGS.get(
-                text,
-                self._LANGS.get(text, "")
-            ).format(*kwargs)
-        else:
-            _ = self._LANGS.get(
-                text,
-                self._DEFAULT_LANGS.get(text, "")
-            ).format(*kwargs)
-        return _
-
+        Returns:
+            _type_: lang text
+        """
+        return str(self._LANGS.get(raw)).format(*kwargs)
 
 # def print(*values: object, sep: str | None = " ", end: str | None = "\n", file: None = None,):
 #     """Prints the values to a stream, or to sys.stdout by default.
