@@ -1,0 +1,11 @@
+{
+  "#": "=====sys start=====",
+  "#": "%Y/%m/%d %H:%M UTC+8",
+  "updata": "2024/5/24 12:56 UTC+8",
+  "any": "{}",
+  "file_lang": "en_us",
+  "#": "=====sys end=====",
+  "#": "{file_name}__{class_name}__{func_name}__{id}",
+  "paul_tools__Logger__del_temp__not_call_this": "is_log is False so not call del_temp",
+  "paul_tools__Logger__write_log__file_closed": "{} The file is closed and the log cannot be written"
+}

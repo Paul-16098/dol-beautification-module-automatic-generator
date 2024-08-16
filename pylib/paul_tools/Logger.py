@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-# all
-from rich import inspect
+from .init import *
 
 # logger
 import os
@@ -11,15 +9,7 @@ from typing import Literal
 from datetime import datetime
 from colorama import Fore
 
-# i18n
-import json
-import locale
-from pathlib import Path
-
-"""Paul-16098 Tools
-"""
-
-__all__ = []
+from .I18n import I18n
 
 
 class Logger:
@@ -30,9 +20,14 @@ class Logger:
 
     __print = print
     __input = input
-    __init_i=0
 
-    def __init__(self, debug: bool = False, temp_path: str = "temp", log_file: str = "log.log", is_log: bool = False, ignore_errors: bool = False):  # 初始化
+    def __str__(self):
+        info(self)
+        return str(self)
+
+    __repo__ = __str__
+
+    def __init__(self, debug: bool = False, temp_path: str = "temp", log_file: str = "log.log", is_log: bool = False, ignore_errors: bool = False, del_tmp: bool = True):  # 初始化
         """init
 
         Args:
@@ -43,34 +38,15 @@ class Logger:
             ignore_errors (bool, optional): ignore errors. Defaults to False.
         """
         try:
-            self.__init_i=self.__init_i+1
             # 初始化 colorama
             colorama.init()
             self.__i18n_obj = I18n()
-            # try:
-            #     no_cofg = False
-            #     type(self.cofg)
-            # except AttributeError as e:
-            #     if e == " 'logger' object has no attribute 'cofg'":
-            #         no_cofg = True
-            #     else:
-            #         no_cofg = False
-            #     if debug:
-            #         _print("e:", e)
-            # if no_cofg:
             self.cofg: dict = dict()
             self.cofg["is_log"] = is_log
             self.cofg["temp_path"] = temp_path
             self.cofg["debug"] = debug
             self.cofg["ignore_errors"] = ignore_errors
-            # if self.cofg["debug"]:
-            #     _print("no cofg")
-            # else:
-            #     if debug:
-            #         _print("has cofg")
-            # del no_cofg
-            if self.cofg["debug"]:
-                self.cofg["is_log"] = True
+            self.cofg["del_tmp"] = del_tmp
             if self.cofg["is_log"]:
                 os.makedirs(f'{self.cofg["temp_path"]}', exist_ok=True)
                 atexit.register(self.exit)
@@ -79,48 +55,53 @@ class Logger:
                 self._log_file = open(self._log_path, "a", encoding='utf-8')
             self._closed = False
             self.log_file_name = log_file
+            # inspect(self, all=True)
+
             if self.cofg["debug"]:
-                self.log_(f'========= init done ({self.__init_i})=========', type_="info")
-                self.log_(f"v{self.ver}", type_="info")
-                self.log_(f"cofg: {self.cofg}", type_="info")
+                self.print_(f'========= init done=========', type_="info")
+                self.print_(f"v{self.ver}", type_="info")
+                self.print_(f"cofg: {self.cofg}", type_="info")
             else:
-                self.write_log(f'========= init done ({self.__init_i})=========', type_="info")
+                self.write_log(f'========= init done=========', type_="info")
                 self.write_log(f"v{self.ver}", type_="info")
                 self.write_log(f"cofg: {self.cofg}", type_="info")
         except Exception as e:
-            self.log_(f'init error, {e} No.{self.__init_i}', 'error')
-            return self.__init__()
+            self.print_(f'init error, {e}', 'error')
 
     def exit(self) -> None:
         if self.cofg["debug"]:
-            self.log_("========= exit =========", type_="info")
+            self.print_("========= exit =========", type_="info")
         else:
             self.write_log("========= exit =========", type_="info")
         if self.cofg["debug"]:
             self.__print("exit run")
-        _ = self.del_temp()
+        _ = self.del_tmp()
         if self.cofg["debug"]:
             self.__print(f"del_temp run: {_}")
 
-    def del_temp(self) -> bool:
+    def del_tmp(self) -> bool:
         """del all temp
 
         Returns:
             bool: If successful, return will be equal to True.
         """
+        if not self.cofg["del_tmp"]:
+            if self.cofg["debug"]:
+                self.__print("del_tmp not run")
+            return True
         if self.cofg["debug"]:
-            self.__print("del_temp run")
+            self.__print("del_tmp run")
         try:
             if self.cofg["is_log"]:
                 self._closed = True
                 self._log_file.close()
             else:
                 if self.cofg["debug"]:
-                    self.log_(
-                        self.__i18n_obj.locale(self.__i18n_obj.Langs.paul_tools__Logger__del_temp__not_call_this), type_="info") # type: ignore
+                    self.print_(
+                        self.__i18n_obj.locale("paul_tools__Logger__del_temp__not_call_this"), type_="info")
                 else:
                     self.write_log(
-                        self.__i18n_obj.locale(self.__i18n_obj.Langs.paul_tools__Logger__del_temp__not_call_this), type_="info") # type: ignore
+                        self.__i18n_obj.locale("paul_tools__Logger__del_temp__not_call_this"), type_="info")
             if not self.cofg["debug"]:
                 # if True:
                 shutil.rmtree(self.cofg["temp_path"])
@@ -160,22 +141,18 @@ class Logger:
         if self._log_file.closed:
             if self._closed == False:
                 self.__print(self.__i18n_obj.locale(
-                    self.__i18n_obj.Langs.paul_tools__Logger__write_log__file_closed, self.log_file_name)) # type: ignore
+                    "paul_tools__Logger__write_log__file_closed", self.log_file_name))
                 self._closed = True
                 return None
             else:
                 return None
         if type2_ == None:
             type2_ = "write_log"
-        if z == None:
-            z = ""
-        if x == None:
-            x = ""
-        # TODO(Paul-16098) 2024-5-13 18:20, UTC+8 done \ --> \\
+        # TODO: (Paul-16098) 2024-5-13 18:20, UTC+8 done \ --> \\
         message = fr"{message}"
 
         if self.cofg["debug"] == True:
-            self.__print("=====/write_log debug=====")
+            self.__print("=====/[write_log debug]=====")
             self.__print("message: ", message)
             self.__print("message.encode: ", message.encode())
             self.__print("message.type: ", type(message))
@@ -183,13 +160,17 @@ class Logger:
             self.__print("type2:", type2_)
             self.__print("z: ", z)
             self.__print("x: ", x)
-            self.__print("=====write_log debug/=====")
+            self.__print("=====[write_log debug]/=====\n")
+        if z == None:
+            z = ""
+        if x == None:
+            x = ""
         self._log_file.write(f'[{time}] [type:{type2_}][{type_}]{
                              z}{x}: {message}\n')
         self._log_file.flush()
         return None
 
-    def _color(self, type_: str, color: str = "") -> tuple[str, str]:
+    def _color(self, type_: str, color: str = "") -> tuple[str | None, str]:
         """Determine the displayed color based on type: str and color: str.
 
         Args:
@@ -210,7 +191,7 @@ class Logger:
                 color = Fore.RED  # 紅色
                 color2 = "[red]"
             else:
-                color2 = ""
+                color2 = None
         else:
             color2 = color
             color2 = f"[{color2}]"
@@ -233,12 +214,12 @@ class Logger:
                 color = Fore.WHITE
         return color2, color
 
-    def log_(self, values: object = "", type_: str = 'log', color: str = "", _x: str = "", sep: str = " ", end: str = "\n", file: None = None, flush: Literal[False] = False) -> None:
-        """in cmd and log files write log
+    def print_(self, values: object = "", type_: str = 'log', color: str = "", _x=None, sep: str = " ", end: str = "\n", file: None = None, flush: Literal[False] = False) -> None:
+        """in cmd write log
 
         Args:
-            values (object): message. Defaults to "".
-            type_ (str, optional): _description_. Defaults to 'log'.
+            `values` (object): message. Defaults to `""`.
+            `type_` (str, optional): _description_. Defaults to `'log'`.
             color (str, optional): _description_. Defaults to "".
             _x (str, optional): _description_. Defaults to "".
             sep (str | None, optional): _description_. Defaults to " ".
@@ -247,16 +228,14 @@ class Logger:
             flush (Literal[False], optional): _description_. Defaults to False.
         """
         if self.cofg["debug"]:
-            self.__print("log_ run")
+            self.__print("print_ run")
         _color, color = self._color(type_=type_, color=color)
-        values = str(values)
-        values = fr"{values}"
         self.write_log(values, type_, "log", _color, x=_x)
-        values = color + values + Fore.RESET
+        values = fr"{color}{values}{Fore.RESET}"
 
         self.__print(values, sep=sep, end=end, file=file, flush=flush)
 
-    def input_(self, prompt: object = "", type_: str = 'log', color: str = "", x_: str = "") -> str:
+    def input_(self, prompt: object = "", type_: str = 'log', color: str = "", x_=None) -> str:
         """in cmd and log files write log
 
         Args:
@@ -270,91 +249,19 @@ class Logger:
         """
         if self.cofg["debug"]:
             self.__print("input_ run")
-        message = str(prompt)
-        message = fr"{prompt}"
+        message = prompt
         _color, color = self._color(type_=type_, color=color)
 
         self.write_log(message, type_, "input", _color, x=x_)
         try:
-            _: str = self.__input(color + message + Fore.RESET)  # type: ignore
+            _: str = self.__input(
+                f'{color}{message}{Fore.RESET}')  # type: ignore
         except KeyboardInterrupt as e:
             _: str = ""
             self.__print()
         self.write_log(_, type_, "input_return")
         return _
 
-
-class I18n:
-    """A i18n module
-    By Paul-16098
-    """
-    ver = "1.0.0.0"
-
-    def __init__(self) -> None:
-        # self.__logger_obj = Logger()
-        """ LANGS """
-        self._DIR_ROOT: Path = Path(__file__).parent
-        self._DIR_LANGS_ROOT: Path = self._DIR_ROOT / "langs"
-
-        self._SYS_LANG: str = (locale.getdefaultlocale()[
-            0]).lower()  # type: ignore
-        self._SYS_LANG_FILE: Path = self._DIR_LANGS_ROOT / \
-            f"{self._SYS_LANG}.json"
-        self._EN_US_LANG_FILE: Path = self._SYS_LANG_FILE if self._SYS_LANG_FILE.exists(
-        ) else self._DIR_LANGS_ROOT / "en_us.json"
-        # self.__logger_obj.write_log(
-        #     f"SYS_LANG: {self._SYS_LANG}", type_="info")
-        if self._SYS_LANG_FILE.exists():
-            with open(self._SYS_LANG_FILE, "r", encoding="utf-8") as fp:
-                self._LANGS = json.load(fp)
-        else:
-            # self.__logger_obj.write_log("No SYS_LANG_FILE", type_="warn")
-            self._LANGS = {}
-        if self._EN_US_LANG_FILE.exists():
-            with open(self._DIR_LANGS_ROOT / "en_us.json", "r", encoding="utf-8") as fp:
-                self._DEFAULT_LANGS = json.load(fp)
-        else:
-            # self.__logger_obj.write_log("No EN_US_LANG_FILE", type_="warn")
-            self._DEFAULT_LANGS = {}
-
-        self._DEFAULT_LANGS.update(self._LANGS)
-        self._LANGS = self._DEFAULT_LANGS
-        del self._DEFAULT_LANGS
-
-    def locale(self, raw: str, *kwargs):
-        """get lang text
-
-        Args:
-            raw (str): the id
-
-        Returns:
-            _type_: lang text
-        """
-        return str(self._LANGS.get(raw)).format(*kwargs)
-
-# def print(*values: object, sep: str | None = " ", end: str | None = "\n", file: None = None,):
-#     """Prints the values to a stream, or to sys.stdout by default.
-
-# sep
-#   string inserted between values, default a space.
-# end
-#   string appended after the last value, default a newline.
-# file
-#   a file-like object (stream); defaults to the current sys.stdout.
-# flush
-#   whether to forcibly flush the stream.
-#     """
-#     logger_obj = logger(is_log=False, ignore_errors=True)
-#     logger_obj.log_(*values, x_="[劫持print]", sep=sep,  # type: ignore
-#                     end=end, file=file)
-
-
-# def input(prompt: object = ""):
-#     """Read a string from standard input. The trailing newline is stripped.
-
-# The prompt string, if given, is printed to standard output without a trailing newline before reading input.
-
-# If the user hits EOF (*nix: Ctrl-D, Windows: Ctrl-Z+Return), raise EOFError. On *nix systems, readline is used if available.
-#     """
-#     logger_obj = logger(is_log=False, ignore_errors=True)
-#     return logger_obj.input_(prompt, x_="[劫持input]")  # type: ignore
+    def log_(self, *p) -> None:
+        self.print_("not use log_, use print_", 'warn')
+        self.print_(*p)
